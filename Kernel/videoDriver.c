@@ -59,3 +59,8 @@ void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
 			if (charGlyph[i] & 1<<j)
 				putPixel(hexColor, x+(7-j), y+i);
 }
+
+void writeWord(uint32_t hexColor, char * str, uint64_t line){
+	for (int i = 0; str[i] != '\0'; i++)
+		putCharGlyph(hexColor, str[i], i*8, line);
+}
