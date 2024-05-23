@@ -16,10 +16,12 @@ static const char kbd_US[256] = {
     0,      0,      18/*left*/,    0,     19/*right*/,     0,      0,      20/*down*/,      0,
 };
 
+char buffer[BUFFER_SIZE] = {0};
+int bufferIndex = 0;
+char flag = 0;
+
 void printKey() {
-    char flag = 0;
-    char buffer[1024] = {0};
-    int currentChar = 0;
+    
     while (!flag)
     {
       int scancodeKey = getKey();
@@ -38,7 +40,7 @@ void printKey() {
         default:
           if (key < 126 && key > 0)
           {
-            buffer[currentChar++] = key;
+            buffer[bufferIndex++] = key;
           }
           
           break;
