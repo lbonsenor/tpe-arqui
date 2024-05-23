@@ -1,7 +1,5 @@
 #include <videoDriver.h>
 #include <font.h>
-
-#define MAX_LINE 47
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
 	uint8_t window_a;			// deprecated
@@ -44,6 +42,16 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
+#define MAX_LINES (VBE_mode_info->height / CHAR_HEIGHT)
+#define MAX_CHARS (VBE_mode_info->width / CHAR_WIDTH)
+
+uint8_t zoom = 1;
+
+void setZoom(uint8_t newZoom){
+	if (newZoom > 4 || newZoom < 1) return;
+	zoom = newZoom;
+}
+
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
     uint64_t offset = (x * ((VBE_mode_info->bpp)/8)) + (y * VBE_mode_info->pitch);
@@ -57,17 +65,21 @@ void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 
 	for (int i = 0; i < 16; i++)
-		for (int j = 0; j < 8; j++)
-			if (charGlyph[i] & 1<<j)
-				putPixel(hexColor, x+(7-j), y+i);
+	for (int j = 0; j < 8; j++)
+		if (charGlyph[i] & 1<<j)
+			for (int zoomx = 0; zoomx < zoom; zoomx++)
+			for (int zoomy = 0; zoomy < zoom; zoomy++)
+				putPixel(hexColor, x+(7-j)*zoom+zoomx, (y+i)*zoom+zoomy);
+				
+				
 }
 
-void writeWord(uint32_t hexColor, char * str, uint64_t line){
-	if (line > MAX_LINE || line < 0) return;
+void print(uint32_t hexColor, char * str, uint64_t line){
+	if (line > MAX_LINES || line < 0) return;
 	for (int i = 0; str[i] != '\0'; i++) {
-		if(i <= 100) putCharGlyph(hexColor, str[i], i*8, line*16);
+		if(i < MAX_CHARS) putCharGlyph(hexColor, str[i], i*8*zoom, line*16);
 		else {
-			writeWord(hexColor, str + i, ++line);
+			print(hexColor, str + i, ++line);
 			return;
 		}
 	}
