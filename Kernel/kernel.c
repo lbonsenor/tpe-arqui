@@ -83,8 +83,7 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	putCharGlyph(0x00159854, 'c', 0, 0);
-	writeWord(0x00159854, "Hola como va", 16);
+	writeWord(0x00159854, "Hola como va", 0);
 	
 	return 0;
 }

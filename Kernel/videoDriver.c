@@ -1,5 +1,7 @@
 #include <videoDriver.h>
 #include <font.h>
+
+#define MAX_LINE 47
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
 	uint8_t window_a;			// deprecated
@@ -52,7 +54,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 
 void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
 	if (c < FIRST_CHAR || c > LAST_CHAR) return;
-	uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
+	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 
 	for (int i = 0; i < 16; i++)
 		for (int j = 0; j < 8; j++)
@@ -61,6 +63,7 @@ void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
 }
 
 void writeWord(uint32_t hexColor, char * str, uint64_t line){
+	if (line > MAX_LINE || line < 0) return;
 	for (int i = 0; str[i] != '\0'; i++)
-		putCharGlyph(hexColor, str[i], i*8, line);
+		putCharGlyph(hexColor, str[i], i*8, line*16);
 }
