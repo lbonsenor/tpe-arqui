@@ -42,8 +42,8 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
-#define MAX_LINES (VBE_mode_info->height / CHAR_HEIGHT)
-#define MAX_CHARS (VBE_mode_info->width / CHAR_WIDTH)
+#define MAX_LINES (VBE_mode_info->height / (CHAR_HEIGHT*zoom))
+#define MAX_CHARS (VBE_mode_info->width / (CHAR_WIDTH*zoom))
 
 uint8_t zoom = 1;
 
