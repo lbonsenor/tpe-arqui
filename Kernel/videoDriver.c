@@ -1,5 +1,5 @@
 #include <videoDriver.h>
-
+#include <font.h>
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
 	uint8_t window_a;			// deprecated
@@ -48,4 +48,14 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF; 
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
+}
+
+void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
+	if (c < FIRST_CHAR || c > LAST_CHAR) return;
+	uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
+
+	for (int i = 0; i < 16; i++)
+		for (int j = 0; j < 8; j++)
+			if (charGlyph[i] & 1<<j)
+				putPixel(hexColor, x+(7-j), y+i);
 }
