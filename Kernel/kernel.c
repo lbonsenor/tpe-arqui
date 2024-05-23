@@ -83,7 +83,7 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	writeWord(0x00159854, "Hola como va", 0);
+	writeWord(0x00159854, "Hola como vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
 	
 	return 0;
 }

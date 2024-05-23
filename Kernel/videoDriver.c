@@ -64,6 +64,11 @@ void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
 
 void writeWord(uint32_t hexColor, char * str, uint64_t line){
 	if (line > MAX_LINE || line < 0) return;
-	for (int i = 0; str[i] != '\0'; i++)
-		putCharGlyph(hexColor, str[i], i*8, line*16);
+	for (int i = 0; str[i] != '\0'; i++) {
+		if(i <= 100) putCharGlyph(hexColor, str[i], i*8, line*16);
+		else {
+			writeWord(hexColor, str + i, ++line);
+			return;
+		}
+	}
 }
