@@ -81,6 +81,12 @@ void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
 				
 }
 
+void clearScreen(){
+	for (int i = 0; i < VBE_mode_info->width; i++)
+	for (int j = 0; j < VBE_mode_info->height; j++)
+		putPixel(0x00000000, i, j);
+}
+
 void print(uint32_t hexColor, char * str, uint64_t line){
 	if (line > MAX_LINES || line < 0) return;
 	for (int i = 0; str[i] != '\0'; i++) {
