@@ -1,5 +1,7 @@
 extern int getKey();
+#include <keyboardDriver.h>
 
+#define isVisibleChar(a) 
 
 void printKey() {
     // Key map
@@ -37,12 +39,39 @@ void printKey() {
     0,  /* F12 Key */
     0,  /* All other keys are undefined */
     };
-    int scancodeKey = getKey();
-    char key[2] = {kbd_US[scancodeKey], 0};
-    // Unknown key
-    if(kbd_US[scancodeKey] == 0) print(0x00159854, "Unknown key", 10);
-    // Print key
-    else print(0x00159854, key, 10);
+    
+    char flag = 0;
+    char buffer[1024] = {0};
+    int currentChar = 0;
+    while (!flag)
+    {
+      char shiftFlag = 0;
+      int scancodeKey = getKey();
+      
+      char key[2] = {kbd_US[scancodeKey], 0};
+      // Unknown key
+      if(kbd_US[scancodeKey] == 0);
+      else {
+        switch (key[0])
+        {
+        case '\n':
+          flag = 1;
+          break;
+        case 0:
+          break;
+        default:
+          if (key[0] < 126 && key[0] > 0)
+          {
+            buffer[currentChar++] = key[0];
+          }
+          
+          break;
+        }
+        print(0x00159854, buffer, 10);
+      }
+    }
+    
+    
     // Execute constantly
     while(1);
 }
