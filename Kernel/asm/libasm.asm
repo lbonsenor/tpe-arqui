@@ -1,4 +1,5 @@
 GLOBAL cpuVendor
+GLOBAL getKey
 
 section .text
 	
