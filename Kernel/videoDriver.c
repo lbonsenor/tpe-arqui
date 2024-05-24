@@ -49,6 +49,7 @@ VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 uint8_t scale = 1;
 
 uint8_t line = 0;
+uint8_t currentLines = 0;
 
 void setScale(uint8_t newScale){
 	if (newScale > 4 || newScale < 1) return;
@@ -95,7 +96,7 @@ void clearScreen() {
 }
 
 void print(uint32_t hexColor, char * str) {
-	printLine(hexColor, str, line);
+	currentLines = printLine(hexColor, str, line);
 }
 
 int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
@@ -110,7 +111,8 @@ int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
 }
 
 void newLine() {
-	line++;
+	line+=currentLines;
+	currentLines = 0;
 }
 
 uint32_t getPixelColor(uint64_t x, uint64_t y){
