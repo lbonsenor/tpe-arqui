@@ -121,7 +121,7 @@ int_keyboard:
         popRegisters
         iretq 
 
-//creo que hará falta el timerTick del tp5 tmb (para el getTime)
+;creo que hará falta el timerTick del tp5 tmb (para el getTime)
 
 int_exc_divide_by_zero: 
         ;call the exception handler with code 00h
