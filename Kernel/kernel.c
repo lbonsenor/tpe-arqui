@@ -84,7 +84,7 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	print(0x00159854, "Hola como vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+	print(0x00159854, "Hola como vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
 	printKey();
 	return 0;
 }
