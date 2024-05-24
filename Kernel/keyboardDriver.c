@@ -32,6 +32,12 @@ char isAlpha(char c) {
     return (c >= 'a' && c <= 'z');
 }
 
+void addToBuffer(char c) {
+  // Resets the index if the buffer is full
+  if (bufferIndex >= BUFFER_SIZE) bufferIndex = 0;
+  buffer[bufferIndex++] = c;
+}
+
 void printKey() {
   // While enter key is not pressed
   while (!enterFlag) {
@@ -40,9 +46,9 @@ void printKey() {
     char key = keyboard[scancodeKey];
     // Alternate capslock
     if (scancodeKey == 0x3A) capsLockFlag = !capsLockFlag;
-    // Press shift
+    // Shift pressed
     else if (key == 5) shiftFlag = 1;
-    // Release shift
+    // Shift released
     else if (scancodeKey == 0xAA) shiftFlag = 0;
     else {
       switch (key) {
@@ -55,13 +61,12 @@ void printKey() {
           break;
         // Key is valid
         default:
-          if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) buffer[bufferIndex++] = key - 'a' + 'A'; 
-          else buffer[bufferIndex++] = key;
+          // Caps
+          if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(key - 'a' + 'A'); 
+          else addToBuffer(key);
           break;
       }
     }
     print(0x00159854, buffer, 10);
-  }  
-  // Execute constantly
-  while(1);
+  }
 }
