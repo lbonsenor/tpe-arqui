@@ -60,6 +60,13 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
 }
 
+void drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int height){
+	if (x+width > VBE_mode_info->width || y+height > VBE_mode_info->height || x < 0 || y < 0 || width < 0 || height < 0) return;
+	for (int i = x; i < x+width; i++)
+	for (int j = y; j < y+height; j++)
+		putPixel(hexColor, i, j);
+}
+
 void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
 	if (c < FIRST_CHAR || c > LAST_CHAR) return;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
@@ -72,6 +79,12 @@ void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y){
 				putPixel(hexColor, x+(7-j)*zoom+zoomx, (y+i)*zoom+zoomy);
 				
 				
+}
+
+void clearScreen(){
+	for (int i = 0; i < VBE_mode_info->width; i++)
+	for (int j = 0; j < VBE_mode_info->height; j++)
+		putPixel(0x00000000, i, j);
 }
 
 void print(uint32_t hexColor, char * str, uint64_t line){

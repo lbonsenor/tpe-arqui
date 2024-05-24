@@ -4,6 +4,7 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <videoDriver.h>
+#include <keyboardDriver.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -83,7 +84,7 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	writeWord(0x00159854, "Hola como vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
-	
+	print(0x00159854, "Hola como vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
+	printKey();
 	return 0;
 }
