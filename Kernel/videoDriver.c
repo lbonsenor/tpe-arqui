@@ -48,6 +48,8 @@ VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
 uint8_t scale = 1;
 
+uint8_t line = 0;
+
 void setScale(uint8_t newScale){
 	if (newScale > 4 || newScale < 1) return;
 	scale = newScale;
@@ -93,13 +95,18 @@ void clearScreen() {
 		putPixel(0x00000000, i, j);
 }
 
-void print(uint32_t hexColor, char * str, uint64_t line) {
+void print(uint32_t hexColor, char * str) {
 	if (line > MAX_LINES || line < 0) return;
 	for (int i = 0; str[i] != '\0'; i++) {
 		if (i < MAX_CHARS) putCharGlyph(hexColor, str[i], i * 8 * scale, line * 16);
 		else {
-			print(hexColor, str + i, ++line);
+			++line;
+			print(hexColor, str + i);
 			return;
 		}
 	}
+}
+
+void newLine() {
+	line++;
 }

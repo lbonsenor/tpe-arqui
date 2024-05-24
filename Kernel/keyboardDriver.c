@@ -38,35 +38,45 @@ void addToBuffer(char c) {
   buffer[bufferIndex++] = c;
 }
 
+void cleanBuffer() {
+  for (int i = 0; i < bufferIndex; i++) buffer[i] = '\0';
+  bufferIndex = 0;
+}
+
 void printKey() {
-  // While enter key is not pressed
-  while (!enterFlag) {
-    int scancodeKey = getKey();
-    // Translate the key to ASCII
-    char key = keyboard[scancodeKey];
-    // Alternate capslock
-    if (scancodeKey == 0x3A) capsLockFlag = !capsLockFlag;
-    // Shift pressed
-    else if (key == 5) shiftFlag = 1;
-    // Shift released
-    else if (scancodeKey == 0xAA) shiftFlag = 0;
-    else {
-      switch (key) {
-        // Key is 'enter'
-        case '\n':
-          enterFlag = 1;
-          break;
-        // Key is not valid
-        case 0:
-          break;
-        // Key is valid
-        default:
-          // Caps
-          if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(key - 'a' + 'A'); 
-          else addToBuffer(key);
-          break;
+  while(1) {
+    // While enter key is not pressed
+    while (!enterFlag) {
+      int scancodeKey = getKey();
+      // Translate the key to ASCII
+      char key = keyboard[scancodeKey];
+      // Alternate capslock
+      if (scancodeKey == 0x3A) capsLockFlag = !capsLockFlag;
+      // Shift pressed
+      else if (key == 5) shiftFlag = 1;
+      // Shift released
+      else if (scancodeKey == 0xAA) shiftFlag = 0;
+      else {
+        switch (key) {
+          // Key is 'enter'
+          case '\n':
+            enterFlag = 1;
+            newLine();
+            break;
+          // Key is not valid
+          case 0:
+            break;
+          // Key is valid
+          default:
+            // Caps
+            if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(key - 'a' + 'A'); 
+            else addToBuffer(key);
+            print(0x00159854, buffer);
+            break;
+        }
       }
     }
-    print(0x00159854, buffer, 10);
+    cleanBuffer();
+    enterFlag = 0;
   }
 }
