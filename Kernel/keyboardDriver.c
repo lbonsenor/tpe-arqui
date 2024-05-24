@@ -42,7 +42,9 @@ void addToBuffer(char c) {
 }
 
 void removeCharFromBuffer() {
-  buffer[--bufferIndex] = '\0';
+  buffer[--bufferIndex] = ' ';
+  print(0x00159854, buffer);
+  buffer[bufferIndex] = '\0';
 }
 
 void cleanBuffer() {

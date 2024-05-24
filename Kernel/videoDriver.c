@@ -83,10 +83,9 @@ void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < 16; i++)
 	for (int j = 0; j < 8; j++)
-		if (charGlyph[i] & 1 << j)
-			for (int scaleX = 0; scaleX < scale; scaleX++)
-			for (int scaleY = 0; scaleY < scale; scaleY++)
-				putPixel(hexColor, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
+		for (int scaleX = 0; scaleX < scale; scaleX++)
+		for (int scaleY = 0; scaleY < scale; scaleY++)
+			putPixel(charGlyph[i] & 1 << j ? hexColor : 0x000000, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
 }
 
 void clearScreen() {
@@ -96,12 +95,15 @@ void clearScreen() {
 }
 
 void print(uint32_t hexColor, char * str) {
-	if (line > MAX_LINES || line < 0) return;
+	printLine(hexColor, str, line);
+}
+
+void printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
+	if (lineToPrint > MAX_LINES || lineToPrint < 0) return;
 	for (int i = 0; str[i] != '\0'; i++) {
-		if (i < MAX_CHARS) putCharGlyph(hexColor, str[i], i * 8 * scale, line * 16);
+		if(i < MAX_CHARS) putCharGlyph(hexColor, str[i], i * 8 * scale, lineToPrint * 16);
 		else {
-			++line;
-			print(hexColor, str + i);
+			printLine(hexColor, str + i, ++lineToPrint);
 			return;
 		}
 	}
