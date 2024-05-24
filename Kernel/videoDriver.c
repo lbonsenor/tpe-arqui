@@ -98,15 +98,15 @@ void print(uint32_t hexColor, char * str) {
 	printLine(hexColor, str, line);
 }
 
-void printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
+int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
 	if (lineToPrint > MAX_LINES || lineToPrint < 0) return;
 	for (int i = 0; str[i] != '\0'; i++) {
 		if(i < MAX_CHARS) putCharGlyph(hexColor, str[i], i * 8 * scale, lineToPrint * 16);
 		else {
-			printLine(hexColor, str + i, ++lineToPrint);
-			return;
+			return 1 + printLine(hexColor, str + i, ++lineToPrint);
 		}
 	}
+	return 1;
 }
 
 void newLine() {
