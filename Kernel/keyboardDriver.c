@@ -2,6 +2,7 @@ extern int getKey();
 
 #include <keyboardDriver.h>
 #include <videoDriver.h>
+#include <lib.h>
 
 #define BUFFER_SIZE 1024
 
@@ -39,7 +40,7 @@ void addToBuffer(char c) {
 }
 
 void cleanBuffer() {
-  for (int i = 0; i < bufferIndex; i++) buffer[i] = '\0';
+  memset(buffer, '\0', bufferIndex);
   bufferIndex = 0;
 }
 
