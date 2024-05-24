@@ -10,3 +10,4 @@ hang:
 	cli
 	hlt	; halt machine should kernel return
 	jmp hang
+//todo hacer que restartee acá si llamamos a "restartMain()"
