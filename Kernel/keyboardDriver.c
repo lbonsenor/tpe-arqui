@@ -4,6 +4,8 @@ extern int getKey();
 #include <videoDriver.h>
 #include <lib.h>
 
+#include <stdlib.h>
+
 #define BUFFER_SIZE 1024
 
 static const char keyboard[256] = {
@@ -31,12 +33,16 @@ char capsLockFlag = 0;
 
 char isAlpha(char c) {
     return (c >= 'a' && c <= 'z');
-}
+} 
 
 void addToBuffer(char c) {
   // Resets the index if the buffer is full
   if (bufferIndex >= BUFFER_SIZE) bufferIndex = 0;
   buffer[bufferIndex++] = c;
+}
+
+void removeCharFromBuffer() {
+  buffer[--bufferIndex] = '\0';
 }
 
 void cleanBuffer() {
@@ -63,6 +69,9 @@ void printKey() {
           case '\n':
             enterFlag = 1;
             newLine();
+            break;
+          case '\b':
+            removeCharFromBuffer();
             break;
           // Key is not valid
           case 0:
