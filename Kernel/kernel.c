@@ -82,8 +82,7 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
-int main()
-{	
+int main() {	
 	print(0x00159854, "Hola como vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0);
 	printKey();
 	return 0;
