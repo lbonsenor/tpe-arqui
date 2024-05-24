@@ -83,7 +83,8 @@ void printKey() {
             // Caps
             if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(key - 'a' + 'A'); 
             else addToBuffer(key);
-            print(0x00159854, buffer);
+            int newLines = print(0x00159854, buffer);
+            if (newLines > 0) cleanBuffer();
             break;
         }
       }

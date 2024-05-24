@@ -94,8 +94,10 @@ void clearScreen() {
 		putPixel(0x00000000, i, j);
 }
 
-void print(uint32_t hexColor, char * str) {
-	printLine(hexColor, str, line);
+int print(uint32_t hexColor, char * str) {
+	int newLines = printLine(hexColor, str, line) - 1;
+	for (int i = 0; i < newLines; i++) newLine();
+	return newLines;
 }
 
 int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
