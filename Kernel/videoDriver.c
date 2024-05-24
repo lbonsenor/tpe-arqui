@@ -83,10 +83,9 @@ void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < 16; i++)
 	for (int j = 0; j < 8; j++)
-		if (charGlyph[i] & 1 << j)
-			for (int scaleX = 0; scaleX < scale; scaleX++)
-			for (int scaleY = 0; scaleY < scale; scaleY++)
-				putPixel(hexColor, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
+		for (int scaleX = 0; scaleX < scale; scaleX++)
+		for (int scaleY = 0; scaleY < scale; scaleY++)
+			putPixel(charGlyph[i] & 1 << j ? hexColor : 0x000000, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
 }
 
 void clearScreen() {
