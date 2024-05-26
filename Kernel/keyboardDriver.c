@@ -51,7 +51,7 @@ void cleanBuffer() {
   memset(buffer, '\0', bufferIndex);
   bufferIndex = 0;
 }
-
+//cambiar a getKey
 void printKey() {
   while(1) {
     // While enter key is not pressed
@@ -83,8 +83,7 @@ void printKey() {
             // Caps
             if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(key - 'a' + 'A'); 
             else addToBuffer(key);
-            int newLines = print(0x00159854, buffer);
-            if (newLines > 0) cleanBuffer();
+            print(0x00159854, buffer);
             break;
         }
       }

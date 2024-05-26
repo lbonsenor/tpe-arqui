@@ -49,21 +49,24 @@ VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 uint8_t scale = 1;
 
 uint8_t line = 0;
+uint8_t currentLines = 0;
 
-void setScale(uint8_t newScale){
-	if (newScale > 4 || newScale < 1) return;
+int setScale(uint8_t newScale) {
+	if (newScale > 4 || newScale < 1) return 1;
 	scale = newScale;
+	return 0;
 }
 
-void scaleUp(uint8_t newScale){
-	setScale(scale + 1);
+int scaleUp() {
+	return setScale(scale + 1);
 }
 
-void scaleDown(uint8_t newScale){
-	setScale(scale - 1);
+int scaleDown() {
+	return setScale(scale - 1);
 }
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
+	// Caso de error: x o y superan el límite (andcho o alto)
     uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
     uint64_t offset = (x * ((VBE_mode_info->bpp) / 8)) + (y * VBE_mode_info->pitch);
     framebuffer[offset]     =  (hexColor) & 0xFF;
@@ -71,21 +74,23 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
 }
 
-void drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int height) {
-	if (x + width > VBE_mode_info->width || y + height > VBE_mode_info->height || x < 0 || y < 0 || width < 0 || height < 0) return;
+int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int height) {
+	if (x + width > VBE_mode_info->width || y + height > VBE_mode_info->height || x < 0 || y < 0 || width < 0 || height < 0) return 1;
 	for (int i = x; i < x + width; i++)
 	for (int j = y; j < y + height; j++)
 		putPixel(hexColor, i, j);
+	return 0;
 }
 
-void putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
-	if (c < FIRST_CHAR || c > LAST_CHAR) return;
+int putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
+	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < 16; i++)
 	for (int j = 0; j < 8; j++)
 		for (int scaleX = 0; scaleX < scale; scaleX++)
 		for (int scaleY = 0; scaleY < scale; scaleY++)
 			putPixel(charGlyph[i] & 1 << j ? hexColor : 0x000000, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
+	return 0;
 }
 
 void clearScreen() {
@@ -94,14 +99,13 @@ void clearScreen() {
 		putPixel(0x00000000, i, j);
 }
 
-int print(uint32_t hexColor, char * str) {
-	int newLines = printLine(hexColor, str, line) - 1;
-	for (int i = 0; i < newLines; i++) newLine();
-	return newLines;
+void print(uint32_t hexColor, char * str) {
+	currentLines = printLine(hexColor, str, line);
 }
 
+// Renombrar a printInLine
 int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
-	if (lineToPrint > MAX_LINES || lineToPrint < 0) return;
+	if (lineToPrint > MAX_LINES || lineToPrint < 0) return 0;
 	for (int i = 0; str[i] != '\0'; i++) {
 		if(i < MAX_CHARS) putCharGlyph(hexColor, str[i], i * 8 * scale, lineToPrint * 16);
 		else {
@@ -112,7 +116,8 @@ int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
 }
 
 void newLine() {
-	line++;
+	line += currentLines;
+	currentLines = 0;
 }
 
 uint32_t getPixelColor(uint64_t x, uint64_t y){
