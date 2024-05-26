@@ -11,3 +11,5 @@
 
 #Object files
 *.o
+
+/.vscode
