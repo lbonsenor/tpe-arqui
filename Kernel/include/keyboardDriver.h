@@ -1,1 +1,2 @@
+void cleanBuffer();
 void printKey();

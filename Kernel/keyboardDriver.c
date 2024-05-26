@@ -51,6 +51,7 @@ void cleanBuffer() {
   memset(buffer, '\0', bufferIndex);
   bufferIndex = 0;
 }
+
 //cambiar a getKey
 void printKey() {
   while(1) {
