@@ -49,8 +49,25 @@ VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 uint8_t scale = 1;
 
 uint8_t line = 0;
-uint8_t currentLines = 0;
+uint8_t writtenLines = 0;
 
+uint16_t getWidthPixels() {
+	return VBE_mode_info->width;
+}
+
+uint16_t getHeightPixels() {
+	return VBE_mode_info->height;
+}
+
+uint16_t getWidthChars() {
+	return getWidthPixels() / (CHAR_WIDTH * scale);
+}
+
+uint16_t getHeightChars() {
+	return getHeightPixels() / (CHAR_HEIGHT * scale);
+}
+
+// Returns 0 if successful
 int setScale(uint8_t newScale) {
 	if (newScale > 4 || newScale < 1) return 1;
 	scale = newScale;
@@ -66,6 +83,7 @@ int scaleDown() {
 }
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
+	if (x > getWidthPixels() || y > getHeightPixels()) return 1;
 	// Caso de error: x o y superan el límite (andcho o alto)
     uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
     uint64_t offset = (x * ((VBE_mode_info->bpp) / 8)) + (y * VBE_mode_info->pitch);
@@ -75,14 +93,14 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 }
 
 int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int height) {
-	if (x + width > VBE_mode_info->width || y + height > VBE_mode_info->height || x < 0 || y < 0 || width < 0 || height < 0) return 1;
+	if (x + width > getWidthPixels() || y + height > getHeightPixels() || x < 0 || y < 0 || width < 0 || height < 0) return 1;
 	for (int i = x; i < x + width; i++)
 	for (int j = y; j < y + height; j++)
 		putPixel(hexColor, i, j);
 	return 0;
 }
 
-int putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
+int putChar(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
 	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < 16; i++)
@@ -94,30 +112,28 @@ int putCharGlyph(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
 }
 
 void clearScreen() {
-	for (int i = 0; i < VBE_mode_info->width; i++)
-	for (int j = 0; j < VBE_mode_info->height; j++)
+	for (int i = 0; i < getWidthPixels(); i++)
+	for (int j = 0; j < getHeightPixels(); j++)
 		putPixel(0x00000000, i, j);
 }
 
 void print(uint32_t hexColor, char * str) {
-	currentLines = printLine(hexColor, str, line);
+	writtenLines = printInLine(hexColor, str, line);
 }
 
-// Renombrar a printInLine
-int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint){
-	if (lineToPrint > MAX_LINES || lineToPrint < 0) return 0;
+// Returns number of lines affected
+int printInLine(uint32_t hexColor, char * str, uint64_t lineToPrintIn){
+	if (lineToPrintIn > MAX_LINES || lineToPrintIn < 0) return 0;
 	for (int i = 0; str[i] != '\0'; i++) {
-		if(i < MAX_CHARS) putCharGlyph(hexColor, str[i], i * 8 * scale, lineToPrint * 16);
-		else {
-			return 1 + printLine(hexColor, str + i, ++lineToPrint);
-		}
+		if(i < MAX_CHARS) putChar(hexColor, str[i], i * 8 * scale, lineToPrintIn * 16);
+		else return 1 + printInLine(hexColor, str + i, ++lineToPrintIn);
 	}
 	return 1;
 }
 
 void newLine() {
-	line += currentLines;
-	currentLines = 0;
+	line += writtenLines;
+	writtenLines = 0;
 }
 
 uint32_t getPixelColor(uint64_t x, uint64_t y){
