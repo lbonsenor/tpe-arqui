@@ -82,7 +82,7 @@ int scaleDown() {
 	return setScale(scale - 1);
 }
 
-void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
+int putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 	if (x > getWidthPixels() || y > getHeightPixels()) return 1;
 	// Caso de error: x o y superan el límite (andcho o alto)
     uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
@@ -90,6 +90,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF; 
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
+	return 0;
 }
 
 int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int height) {
@@ -136,7 +137,7 @@ void newLine() {
 	writtenLines = 0;
 }
 
-uint32_t getPixelColor(uint64_t x, uint64_t y){
+uint32_t getPixelColor(uint64_t x, uint64_t y) {
 	uint8_t *framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
     uint64_t offset = (x * (VBE_mode_info->bpp / 8)) + (y * VBE_mode_info->pitch);
     
