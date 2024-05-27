@@ -125,12 +125,10 @@ void clearScreen() {
 uint32_t getPixelColor(uint64_t x, uint64_t y) {
 	uint8_t *framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
     uint64_t offset = (x * (VBE_mode_info->bpp / 8)) + (y * VBE_mode_info->pitch);
-    
     uint32_t hexColor = 0;
-    hexColor |= framebuffer[offset];          // Blue
-    hexColor |= framebuffer[offset + 1] << 8; // Green
-    hexColor |= framebuffer[offset + 2] << 16;// Red
-
+    hexColor |= framebuffer[offset];          	// Blue
+    hexColor |= framebuffer[offset + 1] << 8; 	// Green
+    hexColor |= framebuffer[offset + 2] << 16;	// Red
 	return hexColor;
 }
 
