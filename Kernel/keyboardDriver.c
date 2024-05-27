@@ -33,6 +33,14 @@ char isAlpha(char c) {
     return (c >= 'a' && c <= 'z');
 } 
 
+//SACAR DE ACA EL SCANCODEE
+void keyboardHandler(uint8_t scancode){
+  //si hay lugar agregarlo al buffer
+  if(bufferIndex < BUFFER_SIZE){
+    buffer[bufferIndex++] = scancode;
+  }
+}
+
 void addToBuffer(char c) {
   // Resets the index if the buffer is full
   if (bufferIndex >= BUFFER_SIZE) bufferIndex = 0;
