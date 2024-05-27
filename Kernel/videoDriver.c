@@ -107,10 +107,12 @@ int putChar(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
 	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < CHAR_HEIGHT; i++)
-	for (int j = 0; j < CHAR_WIDTH; j++)
+	for (int j = 0; j < CHAR_WIDTH; j++) {
+	uint32_t color = charGlyph[i] & 1 << j ? hexColor : 0x000000;
 		for (int scaleX = 0; scaleX < scale; scaleX++)
 		for (int scaleY = 0; scaleY < scale; scaleY++)
-			putPixel(charGlyph[i] & 1 << j ? hexColor : 0x000000, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
+			putPixel(color, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
+	}
 	return 0;
 }
 
@@ -157,10 +159,12 @@ int putCharCursor(uint32_t hexColor, char c) {
 	if (c <= FIRST_CHAR || c >= LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < CHAR_HEIGHT; i++)
-	for (int j = 0; j < CHAR_WIDTH; j++)
+	for (int j = 0; j < CHAR_WIDTH; j++) {
+	uint32_t color = charGlyph[i] & 1 << j ? hexColor : 0x000000;
 		for (int scaleX = 0; scaleX < scale; scaleX++)
 		for (int scaleY = 0; scaleY < scale; scaleY++)
-			putPixel(charGlyph[i] & 1 << j ? hexColor : 0x000000, cursorX + (7 - j) * scale + scaleX, (cursorY + i) * scale + scaleY);
+			putPixel(color, cursorX + (7 - j) * scale + scaleX, (cursorY + i) * scale + scaleY);
+	}
 	cursorX += CHAR_WIDTH * scale;
 	if (cursorX > getWidthPixels() - CHAR_WIDTH * scale) newLine();
 	return 0;
