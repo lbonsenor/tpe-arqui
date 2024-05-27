@@ -114,7 +114,7 @@ void printKey() {
             if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(key - 'a' + 'A'); 
             // Not caps
             else addToBuffer(key);
-            print(0x00159854, buffer);
+            putCharCursor(0x00159854, key);
         }
       }
     }
