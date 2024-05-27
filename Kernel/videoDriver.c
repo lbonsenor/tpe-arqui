@@ -135,8 +135,8 @@ uint32_t getPixelColor(uint64_t x, uint64_t y) {
 
 // Sets the cursor position
 void setCursor(uint16_t x, uint16_t y) {
-	uint16_t maxX = getWidthPixels() - CHAR_WIDTH;
-	uint16_t maxY = getHeightPixels() - CHAR_HEIGHT; 
+	uint16_t maxX = getWidthPixels() - CHAR_WIDTH * scale;
+	uint16_t maxY = getHeightPixels() - CHAR_HEIGHT * scale; 
 	if (x < maxX) cursorX = x;
 	else cursorX = maxX;
 	if (y < maxY) cursorY = y;
@@ -144,7 +144,7 @@ void setCursor(uint16_t x, uint16_t y) {
 }
 
 int putCharCursor(uint32_t hexColor, char c) {
-	if (c < FIRST_CHAR * scale || c > LAST_CHAR * scale) return 1;
+	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < CHAR_HEIGHT; i++)
 	for (int j = 0; j < CHAR_WIDTH; j++)
@@ -152,7 +152,7 @@ int putCharCursor(uint32_t hexColor, char c) {
 		for (int scaleY = 0; scaleY < scale; scaleY++)
 			putPixel(charGlyph[i] & 1 << j ? hexColor : 0x000000, cursorX + (7 - j) * scale + scaleX, (cursorY + i) * scale + scaleY);
 	cursorX += CHAR_WIDTH * scale;
-	if (cursorX > getWidthPixels() - CHAR_WIDTH) newLine();
+	if (cursorX > getWidthPixels() - CHAR_WIDTH * scale) newLine();
 	return 0;
 }
 
@@ -167,5 +167,12 @@ void println(uint32_t hexColor, char * str) {
 
 void newLine() {
 	cursorX = 0;
-	if (cursorY + 2 * CHAR_HEIGHT <= getHeightPixels()) cursorY += CHAR_HEIGHT;
+	if (cursorY + 2 * CHAR_HEIGHT * scale <= getHeightPixels()) cursorY += CHAR_HEIGHT;
+	else {
+        void* dst = (void*)((uint64_t)VBE_mode_info->framebuffer);
+        void* src = (void*)(dst + 3 * (CHAR_HEIGHT * (uint64_t)getWidthPixels() * scale));
+        uint64_t len = 3 * ((uint64_t)getWidthPixels() * (getHeightPixels() - CHAR_HEIGHT) * scale);
+        memcpy(dst, src, len);
+        memset(dst + len, 0, 3 * (uint64_t)getWidthPixels() * CHAR_HEIGHT * scale);
+    }
 }
