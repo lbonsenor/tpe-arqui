@@ -1,5 +1,6 @@
 #include <videoDriver.h>
 #include <font.h>
+#include <lib.h>
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -146,13 +147,13 @@ void setCursor(uint16_t x, uint16_t y) {
 int putCharCursor(uint32_t hexColor, char c) {
 	if (c == '\n') {
 		newLine();
-		return;
+		return 0;
 	}
 	if (c == '\b') {
 		cursorX -= CHAR_WIDTH * scale;
 		putCharCursor(0x000000, ' ');
 		cursorX -= CHAR_WIDTH * scale;
-		return;
+		return 0;
 	}
 	// Not a valid character
 	if (c <= FIRST_CHAR || c >= LAST_CHAR) return 1;
