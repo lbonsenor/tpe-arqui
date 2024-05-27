@@ -5,7 +5,18 @@ GLOBAL int_keyboard
 GLOBAL int_exc_divide_by_zero
 GLOBAL int_exc_invalid_opcode
 GLOBAL int_syscall
+GLOBAL int_timer
 
+GLOBAL picMasterMask
+GLOBAL picSlaveMask
+
+GLOBAL show_registers_dump
+GLOBAL has_regs
+
+EXTERN exceptionDispatcher
+EXTERN syscallHandler
+EXTERN timerHandler
+EXTERN keyboardHandler
 
 ;here go the diferent interruptions
 ;the handlers will execute the response based on the interrupt
@@ -105,29 +116,69 @@ _hlt:
     ;load parameters to pass to exceptions handler
     mov rdi , %1 
     mov rsi , show_registers ; "pointer to string"
-    ; call the exception hanlder TODO
+    call exceptionDispatcher
 %endmacro
 
 
-; now the routines for each exception..
-
 int_keyboard:
         pushRegisters
-        ; ... whatever
-        ; call the keyboard handler with params, etc
+        
+        ;read scancode from keyboard 
+        mov rax, 0
+        in  al , 60h
+
+        ;check if CTRL key was pressed (for register dump)
+        cmp al , 0b00011101
+        jne .continue
+
+        ;do registerdump (we use diff string than for exceptions)
+        mov [show_registers_dump+8], rbx
+        mov [show_registers_dump+16],rcx
+        mov [show_registers_dump+24],rdx
+
+        mov [show_registers_dump+32],rsi
+        mov [show_registers_dump+40],rdi
+
+        mov [show_registers_dump+48],rbp
+        ;now to get stack pointer we add the pushed bytes to rsp
+        mov rax, rsp 
+        add rax, 0x28
+        mov [show_registers_dump+56], rax
+        mov [show_registers_dump+64],  r8
+        mov [show_registers_dump+72],  r9
+        mov [show_registers_dump+80], r10
+        mov [show_registers_dump+88], r11
+        mov [show_registers_dump+96], r12
+        mov [show_registers_dump+104],r13
+        mov [show_registers_dump+112],r14
+        mov [show_registers_dump+120],r15
+        ;now to get instruction pointer we use interruption return address
+        mov rax, [rsp] 
+        mov [show_registers_dump+128], rax
+
+        mov byte [has_regs] , 1
+        jmp .end
+
+.continue:
+        ;check if we "lifted" the ctrl key (if so dont add to buffer)
+        cmp al , 0b10011101
+        je .end
+        ;call the handler
+        mov rdi , rax
+        call keyboardHandler
+.end:
         ;signal the end of interruption to the pic
         mov al, 20h
         out 20h, al
         popRegisters
         iretq 
 
-;creo que hará falta el timerTick del tp5 tmb (para el getTime)
 
+; now the routines for each exception..
 int_exc_divide_by_zero: 
-        ;call the exception handler with code 00h
-
+        exceptionHandler 00h
 int_exc_invalid_opcode:
-        ;call the exception handler with code 06h 
+        exceptionHandler 06h 
 
 int_syscall:
 ; syscalls params:	RDI	RSI	RDX	R10	R8	R9
@@ -135,10 +186,37 @@ int_syscall:
 ; params in C are:	RDI RSI RDX RCX R8  R9
 	mov rcx, r10
 	mov r9, rax
-	; call syscalls handler
+    call syscallHandler
 	iretq
+
+int_timer:
+        pushRegisters
+        call timerHandler
+        ;end interrupt
+        mov al, 20h
+        out 20h, al
+        popRegisters
+        iretq
+
+
+;for protected mode
+picMasterMask:
+	push rbp
+    mov rbp, rsp
+    mov ax, di
+    out	21h, al
+    pop rbp
+    retn
+
+picSlaveMask:
+	push rbp
+    mov rbp, rsp
+    mov ax, di
+    out 0A1h, al
+    pop rbp
+    retn
+
 section .bss
 show_registers resq 17 ; reserve a qword for each register 
-
-
-
+has_regs resb 1; to check whether we have saved or not!
+show_registers_dump resq 17 ;aditionally for dumping (isnt passed as a param but is accessed directly)

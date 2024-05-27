@@ -1,5 +1,5 @@
 #include <stdint.h>
-
+#include <interruptions.h>
 
 
 //flags for segment access
@@ -55,19 +55,28 @@ static void setup_IDT_entry (int index, uint64_t offset) {
 }
 
 // functions from interruptions.asm
-extern void _cli(void);
-extern void _sti(void);
-extern void _hlt(void);
 extern void int_keyboard();
 extern void int_exc_divide_by_zero();
 extern void int_exc_invalid_opcode();
 extern void int_syscall();
+extern void int_timer();
 
 
 void load_IDT(void){
     _cli();
-
-    // Setup  interrupts -> call setup_IDT_entry para c/u 
+    //each code is based on the linux system -> remember to add this to manual bibliography
+    // syscalls 
+    setup_IDT_entry(0x80, (uint64_t)&int_syscall);
+    //for exceptions..
+    setup_IDT_entry(0x00, (uint64_t)&int_exc_divide_by_zero);
+    setup_IDT_entry(0x06, (uint64_t)&int_exc_invalid_opcode);
+    //keyboard and timer
+    setup_IDT_entry(0x20, (uint64_t)&int_timer);
+    setup_IDT_entry(0x21, (uint64_t)&int_keyboard);
     // tmb falta activar el pic para los interrupts del teclado (para que sea en modo protegido)
+
+    // we need to enable the interruptions... (protected mode)
+    picMasterMask(0xFE);
+    picSlaveMask(0xFF);
     _sti();
 }

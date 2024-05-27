@@ -80,7 +80,6 @@ bringHours:
             out 70h, al
             in al, 71h
             sti
-
             ret
 
 whatKeyPressed: 
