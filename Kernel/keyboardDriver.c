@@ -1,4 +1,4 @@
-extern int getKey();
+extern unsigned char getKey();
 
 #include <keyboardDriver.h>
 #include <videoDriver.h>
@@ -33,11 +33,10 @@ char isAlpha(char c) {
     return (c >= 'a' && c <= 'z');
 } 
 
-//SACAR DE ACA EL SCANCODEE
-void keyboardHandler(uint8_t scancode){
+void keyboardHandler(){
   //si hay lugar agregarlo al buffer
   if(bufferIndex < BUFFER_SIZE){
-    buffer[bufferIndex++] = scancode;
+    buffer[bufferIndex++] = getKey();
   }
 }
 
