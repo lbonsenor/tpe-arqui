@@ -104,7 +104,7 @@ int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int heig
 }
 
 int putChar(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
-	if (c <= FIRST_CHAR || c >= LAST_CHAR) return 1;
+	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < CHAR_HEIGHT; i++)
 	for (int j = 0; j < CHAR_WIDTH; j++) {
