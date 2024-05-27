@@ -144,7 +144,18 @@ void setCursor(uint16_t x, uint16_t y) {
 }
 
 int putCharCursor(uint32_t hexColor, char c) {
-	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
+	if (c == '\n') {
+		newLine();
+		return;
+	}
+	if (c == '\b') {
+		cursorX -= CHAR_WIDTH * scale;
+		putCharCursor(0x000000, ' ');
+		cursorX -= CHAR_WIDTH * scale;
+		return;
+	}
+	// Not a valid character
+	if (c <= FIRST_CHAR || c >= LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < CHAR_HEIGHT; i++)
 	for (int j = 0; j < CHAR_WIDTH; j++)
@@ -169,10 +180,10 @@ void newLine() {
 	cursorX = 0;
 	if (cursorY + 2 * CHAR_HEIGHT * scale <= getHeightPixels()) cursorY += CHAR_HEIGHT;
 	else {
-        void* dst = (void*)((uint64_t)VBE_mode_info->framebuffer);
-        void* src = (void*)(dst + 3 * (CHAR_HEIGHT * (uint64_t)getWidthPixels() * scale));
-        uint64_t len = 3 * ((uint64_t)getWidthPixels() * (getHeightPixels() - CHAR_HEIGHT) * scale);
+        void * dst = (void*) ((uint64_t) VBE_mode_info->framebuffer);
+        void * src = (void*) (dst + 3 * (CHAR_HEIGHT * scale * (uint64_t)getWidthPixels()));
+        uint64_t len = 3 * ((uint64_t) getWidthPixels() * (getHeightPixels() - CHAR_HEIGHT * scale));
         memcpy(dst, src, len);
-        memset(dst + len, 0, 3 * (uint64_t)getWidthPixels() * CHAR_HEIGHT * scale);
+        memset(dst + len, 0, 3 * (uint64_t) getWidthPixels() * CHAR_HEIGHT * scale);
     }
 }
