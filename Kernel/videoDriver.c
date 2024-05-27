@@ -150,12 +150,13 @@ int putCharCursor(uint32_t hexColor, char c) {
 		return 0;
 	}
 	if (c == '\b') {
+		cursorX -= CHAR_WIDTH * scale;
 		putCharCursor(0x000000, ' ');
 		cursorX -= CHAR_WIDTH * scale;
 		return 0;
 	}
 	// Not a valid character
-	if (c <= FIRST_CHAR || c >= LAST_CHAR) return 1;
+	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
 	for (int i = 0; i < CHAR_HEIGHT; i++)
 	for (int j = 0; j < CHAR_WIDTH; j++) {
