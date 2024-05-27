@@ -183,6 +183,10 @@ void print(uint32_t hexColor, char * str) {
 	for (; *str != '\0'; str++) putCharCursor(hexColor, *str);
 }
 
+void printNoColor(char * str) {
+	for (; *str != '\0'; str++) putCharCursor(0x00159854, *str);
+}
+
 void println(uint32_t hexColor, char * str) {
 	print(hexColor, str);
 	newLine();
