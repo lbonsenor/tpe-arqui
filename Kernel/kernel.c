@@ -85,6 +85,7 @@ void * initializeKernelBinary()
 int main() {
 	scaleUp();
 	scaleUp();
+	scaleUp();
 	printKey();
 	return 0;
 }
