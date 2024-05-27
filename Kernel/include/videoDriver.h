@@ -22,3 +22,5 @@ void newLine();
 void clearScreen();
 
 int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int height);
+
+void printNoColor(char * str);

@@ -21,8 +21,8 @@ static const char keyboard[256] = {
 };
 
 // Buffer variables
-char buffer[BUFFER_SIZE] = {0};
-int bufferIndex = 0;
+static char buffer[BUFFER_SIZE];
+static int bufferIndex = 0;
 
 // Flags
 char enterFlag = 0;
@@ -31,7 +31,7 @@ char capsLockFlag = 0;
 
 char isAlpha(char c) {
     return (c >= 'a' && c <= 'z');
-} 
+}
 
 void keyboardHandler(){
   //si hay lugar agregarlo al buffer
@@ -53,6 +53,12 @@ void removeCharFromBuffer() {
 void cleanBuffer() {
   memset(buffer, '\0', bufferIndex);
   bufferIndex = 0;
+}
+
+void printBuffer() {
+  while(1) {
+    print(0x00159854, buffer);
+  }
 }
 
 // Returns the scanned key, and checks various cases

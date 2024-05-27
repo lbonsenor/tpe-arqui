@@ -106,12 +106,15 @@ int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int heig
 int putChar(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
 	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
-	for (int i = 0; i < CHAR_HEIGHT; i++)
-	for (int j = 0; j < CHAR_WIDTH; j++) {
-	uint32_t color = charGlyph[i] & (1 << j) ? hexColor : 0x000000;
-		for (int scaleX = 0; scaleX < scale; scaleX++)
-		for (int scaleY = 0; scaleY < scale; scaleY++)
-			putPixel(color, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
+	for (int i = 0; i < CHAR_HEIGHT; i++) {
+		for (int j = 0; j < CHAR_WIDTH; j++) {
+			uint32_t color = charGlyph[i] & (1 << (CHAR_WIDTH - 1 - j)) ? hexColor : 0x000000;
+			for (int scaleX = 0; scaleX < scale; scaleX++) {
+				for (int scaleY = 0; scaleY < scale; scaleY++) {
+					putPixel(color, cursorX + j * scale + scaleX, cursorY + i * scale + scaleY);
+				}
+			}
+		}
 	}
 	return 0;
 }
@@ -150,28 +153,38 @@ int putCharCursor(uint32_t hexColor, char c) {
 		return 0;
 	}
 	if (c == '\b') {
-		cursorX -= CHAR_WIDTH * scale;
-		putCharCursor(0x000000, ' ');
-		cursorX -= CHAR_WIDTH * scale;
-		return 0;
+		if (cursorX >= CHAR_WIDTH * scale) {
+			cursorX -= CHAR_WIDTH * scale;
+			putCharCursor(0x000000, ' ');
+			cursorX -= CHAR_WIDTH * scale;
+			return 0;
+		}
+		return 1;
 	}
 	// Not a valid character
 	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
-	for (int i = 0; i < CHAR_HEIGHT; i++)
-	for (int j = 0; j < CHAR_WIDTH; j++) {
-	uint32_t color = charGlyph[i] & (1 << j) ? hexColor : 0x000000;
-		for (int scaleX = 0; scaleX < scale; scaleX++)
-		for (int scaleY = 0; scaleY < scale; scaleY++)
-			putPixel(color, cursorX + (7 - j) * scale + scaleX, (cursorY + i) * scale + scaleY);
+	for (int i = 0; i < CHAR_HEIGHT; i++) {
+		for (int j = 0; j < CHAR_WIDTH; j++) {
+			uint32_t color = charGlyph[i] & (1 << (CHAR_WIDTH - 1 - j)) ? hexColor : 0x000000;
+			for (int scaleX = 0; scaleX < scale; scaleX++) {
+				for (int scaleY = 0; scaleY < scale; scaleY++) {
+					putPixel(color, cursorX + j * scale + scaleX, cursorY + i * scale + scaleY);
+				}
+			}
+		}
 	}
 	cursorX += CHAR_WIDTH * scale;
-	if (cursorX > getWidthPixels() - CHAR_WIDTH * scale) newLine();
+	if (cursorX >= getWidthPixels() - CHAR_WIDTH * scale) newLine();
 	return 0;
 }
 
 void print(uint32_t hexColor, char * str) {
 	for (; *str != '\0'; str++) putCharCursor(hexColor, *str);
+}
+
+void printNoColor(char * str) {
+	for (; *str != '\0'; str++) putCharCursor(0x00159854, *str);
 }
 
 void println(uint32_t hexColor, char * str) {
@@ -181,7 +194,7 @@ void println(uint32_t hexColor, char * str) {
 
 void newLine() {
 	cursorX = 0;
-	if (cursorY + 2 * CHAR_HEIGHT * scale <= getHeightPixels()) cursorY += CHAR_HEIGHT;
+	if (cursorY + 2 * CHAR_HEIGHT * scale <= getHeightPixels()) cursorY += CHAR_HEIGHT * scale;
 	else {
 		// Pointer to framebuffer
         void * dst = (void*) ((uint64_t) VBE_mode_info->framebuffer);
