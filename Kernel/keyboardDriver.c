@@ -40,9 +40,7 @@ void addToBuffer(char c) {
 }
 
 void removeCharFromBuffer() {
-  buffer[--bufferIndex] = ' ';
-  print(0x00159854, buffer);          // Esto tampoco debería estar acá, creo
-  buffer[bufferIndex] = '\0';
+  buffer[--bufferIndex] = '\0';
 }
 
 void cleanBuffer() {
@@ -100,21 +98,29 @@ void printKey() {
           // Key is not valid
           case 0: break;
           // Shift pressed
-          case 5: shiftFlag = 1;
+          case 5: 
+            shiftFlag = 1;
+            break;
           // Key is 'enter'
           case '\n':
             enterFlag = 1;
             newLine();
             break;
           // Key is 'backspace'
-          case '\b': removeCharFromBuffer();
+          case '\b': 
+            removeCharFromBuffer();
+            break;
           // Key is valid
           default:
             // Caps
-            if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(key - 'a' + 'A'); 
+            if (isAlpha(key) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) {
+              key = key - 'a' + 'A';
+              addToBuffer(key);
+            } 
             // Not caps
             else addToBuffer(key);
             putCharCursor(0x00159854, key);
+            break;
         }
       }
     }
