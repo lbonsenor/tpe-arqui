@@ -66,7 +66,6 @@ char scanKey() {
       case 5: shiftFlag = 1;
       // Key is 'enter'
       case '\n':
-        newLine();                      // Esto no debería estar acá, creo
         cleanBuffer();
       // Key is 'backspace'
       case '\b': removeCharFromBuffer();
@@ -104,11 +103,12 @@ void printKey() {
           // Key is 'enter'
           case '\n':
             enterFlag = 1;
-            newLine();
+            putCharCursor(0x00159854, key);
             break;
           // Key is 'backspace'
           case '\b': 
             removeCharFromBuffer();
+            putCharCursor(0x00159854, key);
             break;
           // Key is valid
           default:
