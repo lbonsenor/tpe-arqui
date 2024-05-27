@@ -179,8 +179,8 @@ int putCharCursor(uint32_t hexColor, char c) {
 	return 0;
 }
 
-void print(uint32_t hexColor, char * str) {
-	for (; *str != '\0'; str++) putCharCursor(hexColor, *str);
+void print(uint32_t hexColor, char str) {
+	for (; str != '\0'; str++) putCharCursor(hexColor, str);
 }
 
 void printNoColor(char * str) {

@@ -2,7 +2,6 @@ GLOBAL cpuVendor
 GLOBAL bringMinutes
 GLOBAL bringHours
 GLOBAL bringSeconds
-GLOBAL whatKeyPressed
 GLOBAL getKey
 
 section .text

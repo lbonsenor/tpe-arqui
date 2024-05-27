@@ -56,9 +56,9 @@ void cleanBuffer() {
 }
 
 void printBuffer() {
-  while(1) {
+  
     print(0x00159854, buffer);
-  }
+  
 }
 
 // Returns the scanned key, and checks various cases
