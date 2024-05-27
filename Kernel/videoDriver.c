@@ -48,8 +48,9 @@ VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
 uint8_t scale = 1;
 
-uint8_t line = 0;
-uint8_t writtenLines = 0;
+// Cursor coordinates
+uint16_t cursorX = 0;
+uint16_t cursorY = 0;
 
 uint16_t getWidthPixels() {
 	return VBE_mode_info->width;
@@ -116,31 +117,8 @@ void clearScreen() {
 	for (int i = 0; i < getWidthPixels(); i++)
 	for (int j = 0; j < getHeightPixels(); j++)
 		putPixel(0x00000000, i, j);
-}
-
-// Auxiliar function for print
-int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint) {
-	if (lineToPrint > MAX_LINES || lineToPrint < 0) return 0;
-	for (int i = 0; str[i] != '\0'; i++) {
-		if (i < MAX_CHARS) putChar(hexColor, str[i], i * CHAR_WIDTH * scale, lineToPrint * CHAR_HEIGHT);
-		else return 1 + printLine(hexColor, str + i, ++lineToPrint);
-	}
-	return 1;
-}
-
-// Returns number of lines affected
-int print(uint32_t hexColor, char * str) {
-	writtenLines = printLine(hexColor, str, line);
-	return writtenLines;
-}
-
-void changeLine(uint64_t newLine) {
-	line = newLine;
-}
-
-void newLine() {
-	line += writtenLines;
-	writtenLines = 0;
+	cursorX = 0;
+	cursorY = 0;
 }
 
 uint32_t getPixelColor(uint64_t x, uint64_t y) {
@@ -153,4 +131,41 @@ uint32_t getPixelColor(uint64_t x, uint64_t y) {
     hexColor |= framebuffer[offset + 2] << 16;// Red
 
 	return hexColor;
+}
+
+// Sets the cursor position
+void setCursor(uint16_t x, uint16_t y) {
+	uint16_t maxX = getWidthPixels() - CHAR_WIDTH;
+	uint16_t maxY = getHeightPixels() - CHAR_HEIGHT; 
+	if (x < maxX) cursorX = x;
+	else cursorX = maxX;
+	if (y < maxY) cursorY = y;
+	else cursorY = maxY;
+}
+
+int putCharCursor(uint32_t hexColor, char c) {
+	if (c < FIRST_CHAR * scale || c > LAST_CHAR * scale) return 1;
+	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
+	for (int i = 0; i < CHAR_HEIGHT; i++)
+	for (int j = 0; j < CHAR_WIDTH; j++)
+		for (int scaleX = 0; scaleX < scale; scaleX++)
+		for (int scaleY = 0; scaleY < scale; scaleY++)
+			putPixel(charGlyph[i] & 1 << j ? hexColor : 0x000000, cursorX + (7 - j) * scale + scaleX, (cursorY + i) * scale + scaleY);
+	cursorX += CHAR_WIDTH * scale;
+	if (cursorX > getWidthPixels() - CHAR_WIDTH) newLine();
+	return 0;
+}
+
+void print(uint32_t hexColor, char * str) {
+	for (; *str != '\0'; str++) putCharCursor(hexColor, *str);
+}
+
+void println(uint32_t hexColor, char * str) {
+	print(hexColor, str);
+	newLine();
+}
+
+void newLine() {
+	cursorX = 0;
+	if (cursorY + 2 * CHAR_HEIGHT <= getHeightPixels()) cursorY += CHAR_HEIGHT;
 }
