@@ -104,8 +104,8 @@ int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int heig
 int putChar(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
 	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
 	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
-	for (int i = 0; i < 16; i++)
-	for (int j = 0; j < 8; j++)
+	for (int i = 0; i < CHAR_HEIGHT; i++)
+	for (int j = 0; j < CHAR_WIDTH; j++)
 		for (int scaleX = 0; scaleX < scale; scaleX++)
 		for (int scaleY = 0; scaleY < scale; scaleY++)
 			putPixel(charGlyph[i] & 1 << j ? hexColor : 0x000000, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
@@ -118,18 +118,24 @@ void clearScreen() {
 		putPixel(0x00000000, i, j);
 }
 
-void print(uint32_t hexColor, char * str) {
-	writtenLines = printInLine(hexColor, str, line);
+// Auxiliar function for print
+int printLine(uint32_t hexColor, char * str, uint64_t lineToPrint) {
+	if (lineToPrint > MAX_LINES || lineToPrint < 0) return 0;
+	for (int i = 0; str[i] != '\0'; i++) {
+		if (i < MAX_CHARS) putChar(hexColor, str[i], i * CHAR_WIDTH * scale, lineToPrint * CHAR_HEIGHT);
+		else return 1 + printLine(hexColor, str + i, ++lineToPrint);
+	}
+	return 1;
 }
 
 // Returns number of lines affected
-int printInLine(uint32_t hexColor, char * str, uint64_t lineToPrintIn){
-	if (lineToPrintIn > MAX_LINES || lineToPrintIn < 0) return 0;
-	for (int i = 0; str[i] != '\0'; i++) {
-		if(i < MAX_CHARS) putChar(hexColor, str[i], i * 8 * scale, lineToPrintIn * 16);
-		else return 1 + printInLine(hexColor, str + i, ++lineToPrintIn);
-	}
-	return 1;
+int print(uint32_t hexColor, char * str) {
+	writtenLines = printLine(hexColor, str, line);
+	return writtenLines;
+}
+
+void changeLine(uint64_t newLine) {
+	line = newLine;
 }
 
 void newLine() {
