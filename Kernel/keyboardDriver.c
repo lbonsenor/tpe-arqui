@@ -88,7 +88,7 @@ char scanKey() {
 
 //cambiar a getKey
 void printKey() {
-  while(1) {
+  while (1) {
     // While enter key is not pressed
     while (!enterFlag) {
       int scancodeKey = getKey();
