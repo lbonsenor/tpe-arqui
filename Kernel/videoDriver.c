@@ -180,10 +180,15 @@ void newLine() {
 	cursorX = 0;
 	if (cursorY + 2 * CHAR_HEIGHT * scale <= getHeightPixels()) cursorY += CHAR_HEIGHT;
 	else {
+		// Pointer to framebuffer
         void * dst = (void*) ((uint64_t) VBE_mode_info->framebuffer);
-        void * src = (void*) (dst + 3 * (CHAR_HEIGHT * scale * (uint64_t)getWidthPixels()));
-        uint64_t len = 3 * ((uint64_t) getWidthPixels() * (getHeightPixels() - CHAR_HEIGHT * scale));
-        memcpy(dst, src, len);
+		// Pointer to framebuffer + offset (one line down)
+        void * src = (void*) (dst + 3 * (CHAR_HEIGHT * scale * (uint64_t) getWidthPixels()));
+        // Number of bytes to copy (multiplied by 3 because of RGB). Copies all but the first line
+		uint64_t len = 3 * ((uint64_t) getWidthPixels() * (getHeightPixels() - CHAR_HEIGHT * scale));
+        // Copies len bytes of data from src to dst
+		memcpy(dst, src, len);
+		// Sets the rest to zero
         memset(dst + len, 0, 3 * (uint64_t) getWidthPixels() * CHAR_HEIGHT * scale);
     }
 }

@@ -63,18 +63,24 @@ char scanKey() {
       // Key is not valid
       case 0: break;
       // Shift pressed
-      case 5: shiftFlag = 1;
+      case 5: 
+        shiftFlag = 1;
+        break;
       // Key is 'enter'
       case '\n':
         cleanBuffer();
+        break;
       // Key is 'backspace'
-      case '\b': removeCharFromBuffer();
+      case '\b': 
+        removeCharFromBuffer();
+        break;
       // Key is valid
       default:
         // Caps
-        if (isAlpha(ASCIIkey) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(ASCIIkey - 'a' + 'A'); 
+        if (isAlpha(ASCIIkey) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(ASCIIkey - 'a' + 'A');
         // Not caps
         else addToBuffer(ASCIIkey);
+        break;
     }
   }
   return scancodeKey;
