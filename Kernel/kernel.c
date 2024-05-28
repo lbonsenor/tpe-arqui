@@ -2,9 +2,9 @@
 #include <string.h>
 #include <lib.h>
 #include <moduleLoader.h>
-#include <naiveConsole.h>
 #include <videoDriver.h>
 #include <keyboardDriver.h>
+#include <idtLoader.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -49,9 +49,11 @@ void * initializeKernelBinary()
 }
 
 int main() {
+	load_IDT();
 	scaleUp();
 	scaleUp();
 	scaleUp();
+	print(0x00159854 , getFromBuffer());
 	printBuffer();
 	return 0;
 }

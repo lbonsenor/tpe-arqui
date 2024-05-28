@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <interruptions.h>
+#include <videoDriver.h>
 
 
 //flags for segment access
@@ -52,6 +53,7 @@ static void setup_IDT_entry (int index, uint64_t offset) {
 	IDT[index].offset_m = (offset >> 16) & 0xFFFF;
 	IDT[index].offset_h = (offset >> 32) & 0xFFFFFFFF;
 	IDT[index].other_cero = (uint64_t) 0;
+    print(0x00159854, 'P');
 }
 
 // functions from interruptions.asm
@@ -73,10 +75,10 @@ void load_IDT(void){
     //keyboard and timer
     setup_IDT_entry(0x20, (uint64_t)&int_timer);
     setup_IDT_entry(0x21, (uint64_t)&int_keyboard);
-    // tmb falta activar el pic para los interrupts del teclado (para que sea en modo protegido)
 
     // we need to enable the interruptions... (protected mode)
-    picMasterMask(0xFE);
+    //0xFE is only for timertick
+    picMasterMask(0xFC);
     picSlaveMask(0xFF);
     _sti();
 }

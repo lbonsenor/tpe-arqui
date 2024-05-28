@@ -3,7 +3,7 @@ GLOBAL bringMinutes
 GLOBAL bringHours
 GLOBAL bringSeconds
 GLOBAL getKey
-
+EXTERN printBuffer
 section .text
 	
 cpuVendor:
@@ -84,9 +84,8 @@ bringHours:
 getKey: 
 	push rbp
 	mov rbp, rsp
-
 	in al, 0x60
-
+    call printBuffer
 	mov rsp, rbp
 	pop rbp
 	ret
