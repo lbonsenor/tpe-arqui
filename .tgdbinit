@@ -1,0 +1,198 @@
+#ARCHIVO MODIFICADO DEL ORIGINAL OBTENIDO EN
+#https://github.com/ficoos/tgdbdb/tree/master
+#A este archivo renómbrenlo como .tgdbinit y lo pueden usar en lugar del original.
+
+python
+import subprocess as sp
+
+class Pane():
+    class SplitDir():
+        HORIZONTAL_RIGHT = '-h'
+        HORIZONTAL_LEFT = '-hb'
+        VERTICAL_ABOVE = '-vb'
+        VERTICAL_BELOW = '-v'
+
+    class ResizeDir():
+        RIGHT = '-R'
+        LEFT = '-L'
+        UP = '-U'
+        DOWN = '-D'
+
+    def __init__(self, id: str, tty: str, module_name: str):
+        self.id = id
+        self.tty = tty
+        self.module_name = module_name
+        if module_name == 'dashboard':
+            self.add_extra_module('')
+        elif module_name != 'gdb':
+            self.add_extra_module(module_name)
+
+    def set_title(self):
+        with open(self.tty, 'ab') as t:
+            t.write(b'\x1b]2;' + self.module_name.encode('utf8') + b'\x1b\\')
+
+    def split(self, dir = SplitDir.VERTICAL_ABOVE, percentage = 50, module_name = ''):
+        NULLPROG = "sh -c 'while [ 1 = 1 ]; do sleep 100; done'"
+        id, tty = Pane.tmux('split-window', '-l', f"{percentage}", '-t', self.id, '-d', dir,
+                             '-P', '-F', '#{pane_id},#{pane_tty}', NULLPROG)
+        # self.check()
+        return Pane(id, tty, module_name)
+
+    def splitResizeCurrent(self, dir = SplitDir.VERTICAL_ABOVE, percentage = 50, module_name = ''):
+        NULLPROG = "sh -c 'while [ 1 = 1 ]; do sleep 100; done'"
+        id, tty = Pane.tmux('split-window', '-l', '9999', '-t', self.id, '-d', dir,
+                             '-P', '-F', '#{pane_id},#{pane_tty}', NULLPROG)
+        Pane.tmux('select-pane', '-t', self.id)
+        Pane.tmux('resize-pane', '-D', f"{percentage}")
+
+        # self.check()
+        return Pane(id, tty, module_name)
+
+    # def set_dashboard(self):
+    #     gdb.execute(f'dashboard -output {self.tty}')
+
+    def add_extra_module(self, module_name: str):
+        gdb.execute(f'dashboard {module_name} -output {self.tty}')
+
+    def check(self):
+        sp.check_call(['stty', '--file', self.tty, '-echo'])
+
+    @staticmethod
+    def tmux(*args):
+        return sp.check_output(['tmux'] + list(args)).decode('utf8').strip().split(',')
+
+    def __str__(self) -> str:
+        return f"{self.module_name}: {{ id: {self.id}, tty: {self.tty} }}"
+
+
+class Window(Pane):
+    def __init__(self, module_name: str):
+        id, tty = Window.create_window()
+        Pane.__init__(self, id, tty, module_name)
+        self.set_title()
+
+    @staticmethod
+    def create_window():
+        Pane.tmux('setw', 'remain-on-exit', 'on')
+        return Pane.tmux('display-message', '-p' , '-F', '#{pane_index},#{pane_tty}')
+
+################### Layout ####################
+# ---------------------------------------------
+# |            |                   |          |
+# |            |                   |  Memory  |
+# |    GDB     |     Registers     |          |
+# |            |                   |----------|
+# |            |                   |          |
+# |--------------------------------|          |
+# |                |               |          |
+# |                |               |   Stack  |
+# |     Source     |   Assembly    |          |
+# |                |               |          |
+# |                |               |          |
+# |                |               |          |
+# ---------------------------------------------
+
+gdb_window = Window('gdb')
+
+# Tamano ideal 64bits = 60 columnas
+stack_pane = gdb_window.split(
+        dir=Pane.SplitDir.HORIZONTAL_RIGHT,
+        percentage='60',
+        module_name='stackmemory'
+    )
+stack_pane.add_extra_module('breakpoints')
+
+# Tamano preferido lineas para zona memoria = 15 lineas
+memory_pane = stack_pane.split(
+        dir=Pane.SplitDir.VERTICAL_ABOVE,
+        percentage=15,
+        module_name='memory'
+    )
+memory_pane.add_extra_module('threads')
+
+
+source_pane = gdb_window.splitResizeCurrent(
+        dir=Pane.SplitDir.VERTICAL_BELOW,
+        percentage=19,
+        module_name='source'
+    )
+# dashboard_pane.set_dashboard()
+source_pane.add_extra_module('variables')
+
+# Tamano ideal 64bits = 82 columnas
+registers_pane = gdb_window.split(
+        dir=Pane.SplitDir.HORIZONTAL_RIGHT,
+        percentage=82,
+        module_name='registers'
+    )
+registers_pane.add_extra_module('history')
+registers_pane.add_extra_module('expressions')
+
+# Tamano ideal 64bits = 55 columnas (al menos)
+assembly_pane = source_pane.split(
+        dir=Pane.SplitDir.HORIZONTAL_RIGHT,
+        percentage=55,
+        module_name='assembly'
+    )
+
+
+#configuraciones que quiero tener siempre
+gdb.execute(f'dashboard memory -style full True')
+
+gdb.execute(f'dashboard registers -style column-major True')
+
+gdb.execute(f'dashboard source -style height 0')
+gdb.execute(f'dashboard assembly -style height 0')
+gdb.execute(f'dashboard source -style highlight-line True')
+gdb.execute(f'dashboard assembly -style highlight-line True')
+
+
+
+#gdb.execute(f'set debuginfod enabled on')
+gdb.execute(f'set disassembly-flavor intel')
+
+
+# Disable unwanted sections
+gdb.execute(f'dashboard breakpoints')
+gdb.execute(f'dashboard threads')
+# gdb.execute(f'dashboard variables')
+gdb.execute(f'dashboard history')
+gdb.execute(f'dashboard stack')
+
+
+# para debug docker
+# set debuginfod enabled off
+gdb.execute(f'target remote 172.20.137.215:1234')
+gdb.execute(f"dashboard registers -style list 'rax rbx rcx rdx rsi rdi rbp rsp r8 r9 r10 r11 r12 r13 r14 r15 rip eflags cs ss ds es fs gs fs_base gs_base k_gs_base cr0 cr2 cr3 cr4 cr8 efer'")
+gdb.execute(f'add-symbol-file Kernel/kernel.elf 0x100000')
+gdb.execute(f'add-symbol-file Userland/0000-sampleCodeModule.elf 0x400000')
+gdb.execute(f'set dir Kernel:Userland:Userland/SampleCodeModule')
+
+
+end
+
+#dashboard -layout memory source assembly registers stack
+dashboard -enabled on
+dashboard -style syntax_highlighting 'monokai'
+
+# make sure dashboard output is updated when gdb state changes
+define hookpost-up
+dashboard
+end
+define hookpost-down
+dashboard
+end
+define hookpost-thread
+dashboard
+end
+define hookpost-delete
+dashboard
+end
+define hookpost-clear
+dashboard
+end
+define hookpost-break
+dashboard
+end
+
+# vim: set ft=python:
