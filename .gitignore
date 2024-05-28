@@ -13,3 +13,8 @@
 *.o
 /.vscode
 run.sh
+.gdb_history
+.tgdbinit
+Kernel/kernel.elf
+run.sh
+Userland/0000-sampleCodeModule.elf
