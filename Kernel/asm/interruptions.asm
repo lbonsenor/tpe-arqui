@@ -124,11 +124,10 @@ int_keyboard:
         pushRegisters
         
         ;read scancode from keyboard 
-        mov rax, 0
         in  al , 60h
 
         ;check if CTRL key was pressed (for register dump)
-        cmp al , 0b00011101
+        cmp al , 0xD1
         jne .continue
 
         ;do registerdump (we use diff string than for exceptions)
@@ -157,16 +156,8 @@ int_keyboard:
         mov [show_registers_dump+128], rax
 
         mov byte [has_regs] , 1
-        jmp .end
-
 .continue:
-        ;check if we "lifted" the ctrl key (if so dont add to buffer)
-        cmp al , 0b10011101
-        je .end
-        ;call the handler
-        mov rdi , rax
         call keyboardHandler
-.end:
         ;signal the end of interruption to the pic
         mov al, 20h
         out 20h, al

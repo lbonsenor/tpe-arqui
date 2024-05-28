@@ -52,6 +52,6 @@ int main() {
 	scaleUp();
 	scaleUp();
 	scaleUp();
-	printKey();
+	printBuffer();
 	return 0;
 }

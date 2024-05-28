@@ -2,7 +2,6 @@ GLOBAL cpuVendor
 GLOBAL bringMinutes
 GLOBAL bringHours
 GLOBAL bringSeconds
-GLOBAL whatKeyPressed
 GLOBAL getKey
 
 section .text
@@ -83,16 +82,11 @@ bringHours:
             ret
 
 getKey: 
-        ;make sure register is empty
-        mov rax, 0
-    .inicio: 
-        ;64h status register
-        in al, 64h
-        ;does signal status port have data for system?
-        and al, 0x01
-        ;if not, return to cycle
-        je .inicio
-        ;else read the data
-        in al, 60h
+	push rbp
+	mov rbp, rsp
 
-        ret
+	in al, 0x60
+
+	mov rsp, rbp
+	pop rbp
+	ret
