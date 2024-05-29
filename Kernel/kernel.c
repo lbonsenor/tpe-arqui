@@ -44,6 +44,5 @@ void * initializeKernelBinary() {
 int main() {
 	load_IDT();
 	playMelody(); // funcion para testear sound.c
-	printNoColor("Main end");
-		return 0;
+	return 0;
 }

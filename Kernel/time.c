@@ -4,7 +4,6 @@ static unsigned long ticks = 0;
 
 void timerHandler() {
 	ticks++;
-	printNoColor("TimerTick");
 }
 
 int ticksElapsed() {
