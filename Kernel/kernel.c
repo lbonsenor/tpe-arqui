@@ -41,6 +41,7 @@ void * initializeKernelBinary() {
 
 int main() {
 	printNoColor("Main start");
-	load_idt();
+	load_IDT();
+	printNoColor("Main end");
 	return 0;
 }

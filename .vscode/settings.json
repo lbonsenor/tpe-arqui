@@ -2,6 +2,7 @@
     "C_Cpp.errorSquiggles": "enabled",
     "files.associations": {
         "compare": "c",
-        "idtloader.h": "c"
+        "idtloader.h": "c",
+        "keyboarddriver.h": "c"
     }
 }

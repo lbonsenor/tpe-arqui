@@ -8,18 +8,19 @@ GLOBAL picSlaveMask
 
 GLOBAL _irq00Handler
 GLOBAL _irq01Handler
-GLOBAL _irq02Handler
-GLOBAL _irq03Handler
-GLOBAL _irq04Handler
-GLOBAL _irq05Handler
 GLOBAL _int80Handler
 
 GLOBAL _exception0Handler
 GLOBAL _exception6Handler
 
+GLOBAL show_registers_dump
+GLOBAL has_regs
+
 EXTERN exceptionDispatcher
 EXTERN syscallHandler
 EXTERN irqDispatcher
+
+EXTERN printBuffer
 
 SECTION .text
 
@@ -158,22 +159,6 @@ _irq01Handler:
     popState
     iretq
 
-; Cascade pic never called
-_irq02Handler:
-	irqHandlerMaster 2
-
-; Serial Port 2 and 4
-_irq03Handler:
-	irqHandlerMaster 3
-
-; Serial Port 1 and 3
-_irq04Handler:
-	irqHandlerMaster 4
-
-; USB
-_irq05Handler:
-	irqHandlerMaster 5
-
 ; Zero Division Exception
 _exception0Handler:
 	exceptionHandler 0
@@ -205,17 +190,17 @@ haltcpu:
 saveRegs:
         mov [show_registers_dump + (1*8)], rbx 
         mov [show_registers_dump + (2*8)], rcx
-        mov [show_registers_dump + (3*8)],rdx 
+        mov [show_registers_dump + (3*8)], rdx 
         mov [show_registers_dump + (4*8)], rsi 
-        mov [show_registers_dump + (5*8)],rdi
-        mov [show_registers_dump + (6*8)],rbp 
-        mov [show_registers_dump + (8*8)],r8
-        mov [show_registers_dump + (9*8)],r9
-        mov [show_registers_dump + (10*8)],r10
-        mov [show_registers_dump + (11*8)],r11
+        mov [show_registers_dump + (5*8)], rdi
+        mov [show_registers_dump + (6*8)], rbp 
+        mov [show_registers_dump + (8*8)], r8
+        mov [show_registers_dump + (9*8)], r9
+        mov [show_registers_dump + (10*8)], r10
+        mov [show_registers_dump + (11*8)], r11
         mov [show_registers_dump + (12*8)], r12
-        mov [show_registers_dump + (13*8)],r13
-        mov [show_registers_dump + (14*8)],r14
+        mov [show_registers_dump + (13*8)], r13
+        mov [show_registers_dump + (14*8)], r14
         mov [show_registers_dump + (15*8)], r15 
 
         ;RSP && RIP && RAX
@@ -234,6 +219,6 @@ saveRegs:
         iretq
 
 SECTION .bss
-	show_registers resq 17 ; reserve a qword for each register 
     has_regs resb 1; to check whether we have saved or not!
+    show_registers resq 17 ; reserve a qword for each register 
     show_registers_dump resq 17 ;aditionally for dumping (isnt passed as a param but is accessed directly)
