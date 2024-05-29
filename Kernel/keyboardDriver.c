@@ -36,9 +36,8 @@ char isAlpha(char c) {
 
 void addToBuffer(char c) {
     // Resets the index if the buffer is full
-    //printNoColor("Added to buffer");
     if (writeIndex >= BUFFER_SIZE) writeIndex = 0;
-    putCharCursor(0x00159854,c);
+    putCharCursor(c);
     buffer[writeIndex++] = c;
     
 }
@@ -97,5 +96,5 @@ char getFromBuffer() {
 
 //used for debugging lol
 void printBuffer() {
-    //printNoColor("Buffer");
+    print("Buffer");
 }

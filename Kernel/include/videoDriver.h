@@ -12,16 +12,17 @@ int scaleDown();
 
 /* Put functions */
 int putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
-int putChar(uint32_t hexColor, char c, uint64_t x, uint64_t y);
-int putCharCursor(uint32_t hexColor, char c);
+int putChar(char c, uint64_t x, uint64_t y);
+int putCharCursor(char c);
 
 /* Print functions */
-void print(uint32_t hexColor, char * str);
-void println(uint32_t hexColor, char * str);
-void printNoColor(char * str);
+void print(char * str);
+void printlnchar(char * str);
 void newLine();
 
 void clearScreen();
+
+void setColor(uint32_t newColor);
 
 uint32_t getPixelColor(uint64_t x, uint64_t y);
 
