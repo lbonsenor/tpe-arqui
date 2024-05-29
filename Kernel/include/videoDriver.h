@@ -22,7 +22,7 @@ void newLine();
 
 void clearScreen();
 
-int setCursorLine(int line);
+int setCursorLine(unsigned int line);
 
 void setColor(uint32_t newColor);
 

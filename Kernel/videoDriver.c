@@ -135,16 +135,17 @@ void setCursor(uint16_t x, uint16_t y) {
 	else cursorY = maxY;
 }
 
-uint16_t lineToHeight(int line) {
+uint16_t lineToHeight(unsigned int line) {
 	return line * (CHAR_HEIGHT * scale);
 }
 
-int getMaxLines() {
-	return getHeightPixels() / (CHAR_HEIGHT * scale);
+int heightToLine(uint16_t height) {
+	return height / (CHAR_HEIGHT * scale);
 }
 
-int setCursorLine(int line) {
-	if (line >= getMaxLines()) return 1;
+int setCursorLine(unsigned int line) {
+	// Gets max line
+	if (line >= heightToLine(getHeightPixels())) return 1;
 	setCursor(cursorX, lineToHeight(line));
 	return 0;
 }
