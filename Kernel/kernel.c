@@ -43,12 +43,7 @@ void * initializeKernelBinary() {
 
 int main() {
 	load_IDT();
-<<<<<<< Updated upstream
-	while(1);
-=======
 	playMelody(); // funcion para testear sound.c
 	printNoColor("Main end");
-	
->>>>>>> Stashed changes
-	return 0;
+		return 0;
 }
