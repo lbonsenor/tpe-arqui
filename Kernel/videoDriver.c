@@ -135,6 +135,20 @@ void setCursor(uint16_t x, uint16_t y) {
 	else cursorY = maxY;
 }
 
+uint16_t lineToHeight(int line) {
+	return line * (CHAR_HEIGHT * scale);
+}
+
+int getMaxLines() {
+	return getHeightPixels() / (CHAR_HEIGHT * scale);
+}
+
+int setCursorLine(int line) {
+	if (line >= getMaxLines()) return 1;
+	setCursor(cursorX, lineToHeight(line));
+	return 0;
+}
+
 // Returns 0 if successful
 int putChar(char c, uint64_t x, uint64_t y) {
 	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;

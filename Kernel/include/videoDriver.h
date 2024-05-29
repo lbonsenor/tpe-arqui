@@ -22,6 +22,8 @@ void newLine();
 
 void clearScreen();
 
+int setCursorLine(int line);
+
 void setColor(uint32_t newColor);
 
 uint32_t getPixelColor(uint64_t x, uint64_t y);
