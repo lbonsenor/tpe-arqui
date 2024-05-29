@@ -5,6 +5,8 @@
 #include <sound.h>
 #include <interrupts.h>
 
+#include <syscallHandler.h>
+
 #define STDIN 0
 #define STDOUT 0
 #define STDERR 2

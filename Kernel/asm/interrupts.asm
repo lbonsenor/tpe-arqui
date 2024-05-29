@@ -171,11 +171,9 @@ _int80Handler:
 	; syscallHandler:	RDI RSI RDX R10 R8  RAX
 	; params in C are:	RDI RSI RDX RCX R8  R9
     pushState
-
     mov rcx, r10
 	mov r9, rax
     call syscallHandler
-
     popState
 	iretq
 
