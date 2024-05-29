@@ -44,24 +44,41 @@ void addToBuffer(char c) {
 }
 
 void keyboardHandler() {
-    //printNoColor("KeyboardHandler Start");
-    unsigned char key = getKey();
-    if (key < 83 || key == 0xAA /* Release SHIFT */ || key == 0x3A /* CAPS Lock */) {
-        if (writeIndex >= BUFFER_SIZE) return; // Buffer is full
-        if (keyboard[key] == 5 && !shiftFlag) shiftFlag = 1; // Shift key
-        else if (key == 0xAA) shiftFlag = 0; // Shift released
-        else if (key == 0x3A) capsLockFlag = !capsLockFlag; // Caps Lock
-        else {
-            char character = keyboard[key];
-            if (isAlpha(key)) {
-                if ((shiftFlag && !capsLockFlag) || (!shiftFlag && capsLockFlag)) addToBuffer(character - 'a' + 'A');
-                else addToBuffer(character);
-            } else {
-                if (shiftFlag) addToBuffer(keyboard[key]);
-                else addToBuffer(character);
-            }
-        }
+  // While enter key is not pressed
+  unsigned char scancodeKey = getKey();
+  // Translate the key to ASCII
+  char ASCIIkey = keyboard[scancodeKey];
+  // Alternate capslock
+  if (scancodeKey == 0x3A) capsLockFlag = !capsLockFlag;
+  // Shift released
+  else if (scancodeKey == 0xAA) shiftFlag = 0;
+  else {
+    switch (ASCIIkey) {
+      // Key is not valid
+      case 0: break;
+      // Shift pressed
+      case 5: 
+        shiftFlag = 1;
+        break;
+      // Key is 'enter'
+      case '\n':
+        addToBuffer(ASCIIkey);
+        cleanBuffer();
+        break;
+      // Key is 'backspace'
+      case '\b': 
+        addToBuffer(ASCIIkey);
+        removeCharFromBuffer();
+        break;
+      // Key is valid
+      default:
+        // Caps
+        if (isAlpha(ASCIIkey) && ((capsLockFlag && !shiftFlag) || (!capsLockFlag && shiftFlag))) addToBuffer(ASCIIkey - 'a' + 'A');
+        // Not caps
+        else addToBuffer(ASCIIkey);
+        break;
     }
+  }
 }
 
 void removeCharFromBuffer() {

@@ -43,7 +43,6 @@ int main() {
 	printNoColor("Main start");
 	load_IDT();
 	while(1);
-	printNoColor("Main end");
-	
+	printNoColor("Main end");	
 	return 0;
 }
