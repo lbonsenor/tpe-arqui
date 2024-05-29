@@ -124,7 +124,7 @@ _wait:
 %macro intHandlerMaster 1
         pushRegisters
 
-        mov rdi, $1 ; macro parameter
+        mov rdi, %1 ; macro parameter
         call intDispatcher 
 
         ;signal EOI
@@ -169,13 +169,14 @@ saveRegs:
         popRegisters
         iretq
 int_keyboard:
+        ;call printBuffer
         pushRegisters
         in al, 0x60 ; readKey
         cmp al , 0x1D ; check if CTRL is pressed (used to save registers)
         je saveRegs
 
-        mov rdi , 1 ; param for dispatcher
-        call intDispatcher
+        popReg
+        intHandlerMaster 01h
         ;EOI
         mov al , 20h
         out 20h , al
@@ -201,17 +202,17 @@ int_syscall:
 	iretq
 
 int_timer:
-        intHandlerMaster 0 ; 00 code for the timer tick
+        intHandlerMaster 00h ; 00 code for the timer tick
 
 
 ;for protected mode
 picMasterMask:
-	push rbp
-    mov rbp, rsp
-    mov ax, di
-    out	21h, al
-    pop rbp
-    retn
+        push rbp
+        mov rbp, rsp
+        mov ax, di
+        out	21h, al
+        pop rbp
+        retn
 
 picSlaveMask:
 	push rbp

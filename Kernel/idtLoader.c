@@ -53,7 +53,6 @@ static void setup_IDT_entry (int index, uint64_t offset) {
 	IDT[index].offset_m = (offset >> 16) & 0xFFFF;
 	IDT[index].offset_h = (offset >> 32) & 0xFFFFFFFF;
 	IDT[index].other_cero = (uint64_t) 0;
-    print(0x00159854, 'P');
 }
 
 // functions from interruptions.asm
@@ -65,7 +64,6 @@ extern void int_timer();
 
 
 void load_IDT(void){
-    _cli();
     //each code is based on the linux system -> remember to add this to manual bibliography
     // syscalls 
     setup_IDT_entry(0x80, (uint64_t)&int_syscall);
@@ -77,8 +75,8 @@ void load_IDT(void){
     setup_IDT_entry(0x21, (uint64_t)&int_keyboard);
 
     // we need to enable the interruptions... (protected mode)
-    //0xFE is only for timertick
-    picMasterMask(0xFC);
-    picSlaveMask(0xFF);
+    picMasterMask(0xFC); //only enable IRQ 0 and 1 in PIC1
+    picSlaveMask(0xFF);  // desable all interruptions PIC2
+
     _sti();
 }

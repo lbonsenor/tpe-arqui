@@ -38,11 +38,14 @@ void addToBuffer(char c) {
   // Resets the index if the buffer is full
   if (bufferIndex >= BUFFER_SIZE) bufferIndex = 0;
   buffer[bufferIndex++] = c;
+  printBuffer();
 }
 
 void keyboardHandler() {
     unsigned char key = getKey();
+    if(key != 0){
     if (key < 83 || key == 0xAA /* Release SHIFT */ || key == 0x3A /* CAPS Lock */) {
+        print(0x00159854, keyboard[key]);
         if (bufferIndex >= BUFFER_SIZE) return; // Buffer is full
 
         if (keyboard[key] == 5 && !shiftFlag) { // Shift key
@@ -67,11 +70,15 @@ void keyboardHandler() {
                   
                 }
             }
-            print(0x00159854, character);
-        }
 
+        }
     }
     //_wait();
+    }
+    // else{
+    //     print(0x00159854, 'A');
+    // }
+    
 }
 
 void removeCharFromBuffer() {

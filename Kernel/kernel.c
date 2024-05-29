@@ -12,6 +12,8 @@ extern uint8_t data;
 extern uint8_t bss;
 extern uint8_t endOfKernelBinary;
 extern uint8_t endOfKernel;
+extern void _sti();
+extern void test();
 
 static const uint64_t PageSize = 0x1000;
 
@@ -49,11 +51,14 @@ void * initializeKernelBinary()
 }
 
 int main() {
+	scaleUp();
+	scaleUp();
+	scaleUp();
 	load_IDT();
-	scaleUp();
-	scaleUp();
-	scaleUp();
-	print(0x00159854 , getFromBuffer());
-	printBuffer();
+	 int i =0;
+	 while(15){
+	 	test();
+	 	i++;
+	}
 	return 0;
 }
