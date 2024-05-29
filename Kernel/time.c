@@ -1,9 +1,17 @@
 #include <time.h>
 #include <videoDriver.h>
+
+extern uint64_t getMinutes();
+extern uint64_t getSeconds();
+extern uint64_t getHours();
 static unsigned long ticks = 0;
 
 void timerHandler() {
 	ticks++;
+}
+
+uint64_t getTime(){
+    return (uint64_t) getHours() | ((uint64_t)getMinutes() << 8) | ((uint64_t)getSeconds() << 16);
 }
 
 int ticksElapsed() {
