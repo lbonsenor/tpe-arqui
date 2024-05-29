@@ -173,6 +173,7 @@ int_timer:
         intHandlerMaster 0 ; 00 code for the timer tick
 
 int_keyboard:
+        call printBuffer
         pushRegisters
         
         in al, 0x60 ; readKey
@@ -216,7 +217,7 @@ picMasterMask:
         mov ax, di
         out 21h, al
         pop rbp
-        retn
+        retn    
 
 picSlaveMask:
 	push rbp

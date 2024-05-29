@@ -63,21 +63,21 @@ extern void int_syscall();
 
 
 void load_IDT(void) {
-    println(0x00159854, "idtLoaderStart");
+    println(0x00159854, "idtLoader Start");
     _cli();
     //each code is based on the linux system -> remember to add this to manual bibliography
-    // syscalls 
-    setup_IDT_entry(0x80, (uint64_t)&int_syscall);
     //for exceptions..
     setup_IDT_entry(0x00, (uint64_t)&int_exc_divide_by_zero);
     setup_IDT_entry(0x06, (uint64_t)&int_exc_invalid_opcode);
     //keyboard and timer
     setup_IDT_entry(0x20, (uint64_t)&int_timer);
-    setup_IDT_entry(0x21, (uint64_t)&int_keyboard);
+    setup_IDT_entry(0x21, (uint64_t)&int_keyboard); 
+    // syscalls 
+    setup_IDT_entry(0x80, (uint64_t)&int_syscall);
     // we need to enable the interruptions... (protected mode)
     //0xFE is only for timertick
     picMasterMask(0xFC);
     picSlaveMask(0xFF);
     _sti();
-    println(0x00159854, "idtLoaderEnd");
+    println(0x00159854, "idtLoader End");
 }

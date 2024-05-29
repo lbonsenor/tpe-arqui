@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+void int_keyboard(void);
+
 void _cli(void);
 void _sti8(void);
 void _hlt(void);

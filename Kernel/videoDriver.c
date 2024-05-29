@@ -185,6 +185,7 @@ void print(uint32_t hexColor, char * str) {
 
 void printNoColor(char * str) {
 	print(0x00159854, str);
+	newLine();
 }
 
 void println(uint32_t hexColor, char * str) {
