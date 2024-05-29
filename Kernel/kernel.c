@@ -50,10 +50,5 @@ void * initializeKernelBinary()
 
 int main() {
 	load_IDT();
-	scaleUp();
-	scaleUp();
-	scaleUp();
-	print(0x00159854 , getFromBuffer());
-	printBuffer();
 	return 0;
 }

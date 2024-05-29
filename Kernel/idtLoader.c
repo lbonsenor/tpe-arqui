@@ -2,7 +2,6 @@
 #include <interruptions.h>
 #include <videoDriver.h>
 
-
 //flags for segment access
 #define ACS_PRESENT     0x80            /* sgm present in memory */
 #define ACS_CSEG        0x18            /* code segment */
@@ -10,8 +9,8 @@
 #define ACS_READ        0x02            /* read segment */
 #define ACS_WRITE       0x02            /* write segment */
 #define ACS_IDT         ACS_DSEG
-#define ACS_INT_386 	  0x0E            /* Interrupt GATE in 32 bits */
-#define ACS_INT         ( ACS_PRESENT | ACS_INT_386 )
+#define ACS_INT_386 	0x0E            /* Interrupt GATE in 32 bits */
+#define ACS_INT         (ACS_PRESENT | ACS_INT_386)
 
 #define ACS_CODE        (ACS_PRESENT | ACS_CSEG | ACS_READ)
 #define ACS_DATA        (ACS_PRESENT | ACS_DSEG | ACS_WRITE)
@@ -53,18 +52,18 @@ static void setup_IDT_entry (int index, uint64_t offset) {
 	IDT[index].offset_m = (offset >> 16) & 0xFFFF;
 	IDT[index].offset_h = (offset >> 32) & 0xFFFFFFFF;
 	IDT[index].other_cero = (uint64_t) 0;
-    print(0x00159854, 'P');
 }
 
 // functions from interruptions.asm
+extern void int_timer();
 extern void int_keyboard();
 extern void int_exc_divide_by_zero();
 extern void int_exc_invalid_opcode();
 extern void int_syscall();
-extern void int_timer();
 
 
-void load_IDT(void){
+void load_IDT(void) {
+    println(0x00159854, "idtLoaderStart");
     _cli();
     //each code is based on the linux system -> remember to add this to manual bibliography
     // syscalls 
@@ -75,10 +74,10 @@ void load_IDT(void){
     //keyboard and timer
     setup_IDT_entry(0x20, (uint64_t)&int_timer);
     setup_IDT_entry(0x21, (uint64_t)&int_keyboard);
-
     // we need to enable the interruptions... (protected mode)
     //0xFE is only for timertick
     picMasterMask(0xFC);
     picSlaveMask(0xFF);
     _sti();
+    println(0x00159854, "idtLoaderEnd");
 }

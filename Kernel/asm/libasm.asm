@@ -48,6 +48,7 @@ bringSeconds:
             sti
 
             ret
+            
 bringMinutes:
             cli
             ;config del numero n binario
@@ -64,6 +65,7 @@ bringMinutes:
             sti
 
             ret
+
 bringHours:
             cli
 
@@ -88,4 +90,4 @@ getKey:
     call printBuffer
 	mov rsp, rbp
 	pop rbp
-	ret
+	ret 

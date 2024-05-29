@@ -179,12 +179,12 @@ int putCharCursor(uint32_t hexColor, char c) {
 	return 0;
 }
 
-void print(uint32_t hexColor, char str) {
-	putCharCursor(hexColor, str);
+void print(uint32_t hexColor, char * str) {
+	for (; *str != '\0'; *str++) putCharCursor(hexColor, *str);
 }
 
 void printNoColor(char * str) {
-	for (; *str != '\0'; str++) putCharCursor(0x00159854, *str);
+	for (; *str != '\0'; *str++) putCharCursor(0x00159854, *str);
 }
 
 void println(uint32_t hexColor, char * str) {
