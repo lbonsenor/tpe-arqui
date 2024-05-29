@@ -2,7 +2,7 @@ GLOBAL cpuVendor
 GLOBAL getKey
 GLOBAL getSeconds
 GLOBAL getMinutes
-GLOBAL getSeconds
+GLOBAL getHours
 
 section .text
 	
