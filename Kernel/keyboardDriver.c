@@ -71,7 +71,7 @@ void cleanBuffer() {
     bufferIndex = 0;
 }
 char getFromBuffer() {
-    if (readBuffer < BUFFER_SIZE)
+    if (readBuffer < BUFFER_SIZE) readBuffer = 0;
     return buffer[readBuffer++];
 }
 
