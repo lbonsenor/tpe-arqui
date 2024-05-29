@@ -144,7 +144,6 @@ _irq00Handler:
 ; Keyboard
 _irq01Handler:
 	pushState
-        
     in al, 0x60 ; readKey
     cmp al, 0x1D ; check if left CTRL is pressed (used to save registers)
     je saveRegs

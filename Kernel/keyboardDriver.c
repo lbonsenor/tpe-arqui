@@ -1,5 +1,6 @@
 #include <keyboardDriver.h>
 #include <videoDriver.h>
+#include <interrupts.h>
 #include <lib.h>
 
 #define BUFFER_SIZE 1024

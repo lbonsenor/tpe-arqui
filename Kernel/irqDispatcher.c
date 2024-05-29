@@ -1,4 +1,5 @@
 #include <keyboardDriver.h>
+#include <videoDriver.h>
 #include <stdint.h>
 #include <time.h>
 
@@ -6,6 +7,7 @@ static void int_20();
 static void int_21();
 
 void irqDispatcher(uint64_t irq) {
+	printNoColor("irqDispatcher start");
 	switch (irq) {
 		case 0:
 			int_20();
