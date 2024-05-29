@@ -3,7 +3,7 @@ GLOBAL bringMinutes
 GLOBAL bringHours
 GLOBAL bringSeconds
 GLOBAL getKey
-
+EXTERN printBuffer
 section .text
 	
 cpuVendor:
@@ -48,6 +48,7 @@ bringSeconds:
             sti
 
             ret
+            
 bringMinutes:
             cli
             ;config del numero n binario
@@ -64,6 +65,7 @@ bringMinutes:
             sti
 
             ret
+
 bringHours:
             cli
 
@@ -84,9 +86,8 @@ bringHours:
 getKey: 
 	push rbp
 	mov rbp, rsp
-
 	in al, 0x60
-
+    call printBuffer
 	mov rsp, rbp
 	pop rbp
-	ret
+	ret 

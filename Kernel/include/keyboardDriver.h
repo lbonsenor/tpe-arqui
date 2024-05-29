@@ -1,7 +1,5 @@
+void removeCharFromBuffer();
 void cleanBuffer();
-
-char scanKey();
-
-void printKey();
-
+char getFromBuffer();
 void printBuffer();
+void keyboardHandler();

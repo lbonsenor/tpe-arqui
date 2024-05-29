@@ -179,12 +179,13 @@ int putCharCursor(uint32_t hexColor, char c) {
 	return 0;
 }
 
-void print(uint32_t hexColor, char str) {
-	for (; str != '\0'; str++) putCharCursor(hexColor, str);
+void print(uint32_t hexColor, char * str) {
+	for (; *str != '\0'; str++) putCharCursor(hexColor, *str);
 }
 
 void printNoColor(char * str) {
-	for (; *str != '\0'; str++) putCharCursor(0x00159854, *str);
+	print(0x00159854, str);
+	newLine();
 }
 
 void println(uint32_t hexColor, char * str) {
@@ -192,7 +193,7 @@ void println(uint32_t hexColor, char * str) {
 	newLine();
 }
 
-void newLine() {
+void newLine() {	
 	cursorX = 0;
 	if (cursorY + 2 * CHAR_HEIGHT * scale <= getHeightPixels()) cursorY += CHAR_HEIGHT * scale;
 	else {

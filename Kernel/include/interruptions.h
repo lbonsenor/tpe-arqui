@@ -3,10 +3,13 @@
 
 #include <stdint.h>
 
+void int_keyboard(void);
+
 void _cli(void);
 void _sti8(void);
 void _hlt(void);
 void _sti(void);
+void _wait(void);
 
 void picMasterMask(uint8_t mask);
 void picSlaveMask(uint8_t mask);

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+void timerHandler();
 uint64_t getElapsedTicks();
 uint64_t getElapsedMillis();
 uint64_t getElapsedSeconds();
