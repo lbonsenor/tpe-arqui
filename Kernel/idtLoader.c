@@ -37,6 +37,7 @@ void load_IDT() {
 	picSlaveMask(0xFF);
   // Enable interruptions
 	_sti();
+  //printNoColor("sti working");
 }
 
 static void setup_IDT_entry (int index, uint64_t offset) {

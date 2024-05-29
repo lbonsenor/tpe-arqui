@@ -36,13 +36,15 @@ char isAlpha(char c) {
 
 void addToBuffer(char c) {
     // Resets the index if the buffer is full
-    printNoColor("Added to buffer");
+    //printNoColor("Added to buffer");
     if (writeIndex >= BUFFER_SIZE) writeIndex = 0;
+    putCharCursor(0x00159854,c);
     buffer[writeIndex++] = c;
+    
 }
 
 void keyboardHandler() {
-    printNoColor("KeyboardHandler Start");
+    //printNoColor("KeyboardHandler Start");
     unsigned char key = getKey();
     if (key < 83 || key == 0xAA /* Release SHIFT */ || key == 0x3A /* CAPS Lock */) {
         if (writeIndex >= BUFFER_SIZE) return; // Buffer is full
@@ -78,5 +80,5 @@ char getFromBuffer() {
 
 //used for debugging lol
 void printBuffer() {
-    printNoColor("Buffer");
+    //printNoColor("Buffer");
 }
