@@ -3,6 +3,8 @@ GLOBAL getKey
 GLOBAL getSeconds
 GLOBAL getMinutes
 GLOBAL getHours
+GLOBAL inb
+GLOBAL outb
 
 section .text
 	
@@ -92,3 +94,24 @@ getHours:
     
 	sti
     ret
+
+; Code segment imspired from: https://wiki.osdev.org/PC_Speaker
+    inb:
+	push rbp
+	mov rbp, rsp
+	mov rdx, rdi
+	mov rax, 0
+    in al, dx
+	mov rsp, rbp
+	pop rbp
+	ret
+
+outb:
+	push rbp
+	mov rbp, rsp
+	mov rax, rsi
+	mov rdx, rdi
+	out dx, al
+	mov rsp, rbp
+	pop rbp
+	ret

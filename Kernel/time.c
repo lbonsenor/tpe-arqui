@@ -8,7 +8,6 @@ static unsigned long ticks = 0;
 
 void timerHandler() {
 	ticks++;
-	printNoColor("TimerTick");
 }
 
 uint64_t getTime(){
@@ -25,4 +24,11 @@ int millisElapsed(){
 //rounding up slightly
 int secondsElapsed() {
 	return ticks / 18;
+}
+
+void timer_wait(int delta) { 
+	int initialTicks = ticks;
+	while(ticks - initialTicks < delta) {
+		_hlt();
+	}
 }

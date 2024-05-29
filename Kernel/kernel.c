@@ -5,6 +5,8 @@
 #include <naiveConsole.h>
 #include <videoDriver.h>
 #include <idtLoader.h>
+#include<sound.h>
+#include<time.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -41,6 +43,6 @@ void * initializeKernelBinary() {
 
 int main() {
 	load_IDT();
-	while(1);
+	playMelody(); // funcion para testear sound.c
 	return 0;
 }
