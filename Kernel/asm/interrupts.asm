@@ -70,8 +70,6 @@ SECTION .text
 	iretq
 %endmacro
 
-
-
 %macro exceptionHandler 1
 	pushState
 
@@ -82,7 +80,6 @@ SECTION .text
 	iretq
 %endmacro
 
-
 _hlt:
 	sti
 	hlt
@@ -91,7 +88,6 @@ _hlt:
 _cli:
 	cli
 	ret
-
 
 _sti:
 	sti
@@ -112,7 +108,6 @@ picSlaveMask:
     out	0A1h,al
     pop     rbp
     retn
-
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
@@ -138,7 +133,6 @@ _irq04Handler:
 _irq05Handler:
 	irqHandlerMaster 5
 
-
 ;Zero Division Exception
 _exception0Handler:
 	exceptionHandler 0
@@ -147,8 +141,6 @@ haltcpu:
 	cli
 	hlt
 	ret
-
-
 
 SECTION .bss
 	aux resq 1
