@@ -1,7 +1,6 @@
-#include <stdint.h>
+#include <interrupts.h>
 #include <idtLoader.h>
 #include <defs.h>
-#include <interrupts.h>
 
 #pragma pack(push)		/* Push de la alineación actual */
 #pragma pack (1) 		/* Alinear las siguiente estructuras a 1 byte */
@@ -16,22 +15,27 @@ typedef struct {
 
 #pragma pack(pop)		/* Reestablece la alinceación actual */
 
-
-
 DESCR_INT * idt = (DESCR_INT *) 0;	// IDT de 255 entradas
 
 static void setup_IDT_entry (int index, uint64_t offset);
 
 void load_idt() {
-
+  // Disable interrupts
+  _cli();
+  // Timer interruption
   setup_IDT_entry (0x20, (uint64_t)&_irq00Handler);
+  // Keyboard interruption
+  setup_IDT_entry (0x21, (uint64_t)&_irq01Handler);
+  // Divide by zero exception
   setup_IDT_entry (0x00, (uint64_t)&_exception0Handler);
-
-
-	//Solo interrupcion timer tick habilitadas
-	picMasterMask(0xFE); 
+  // Invalid opcode exception
+  setup_IDT_entry (0x00, (uint64_t)&_exception6Handler);
+  //Syscalls interruption
+  setup_IDT_entry (0x80, (uint64_t)&_int80Handler);
+	// Keyboard and timer interruptions enabled
+	picMasterMask(0xFC); 
 	picSlaveMask(0xFF);
-        
+  // Enable interruptions
 	_sti();
 }
 

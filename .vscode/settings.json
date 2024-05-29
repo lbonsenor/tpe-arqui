@@ -1,3 +1,7 @@
 {
-    "C_Cpp.errorSquiggles": "enabled"
+    "C_Cpp.errorSquiggles": "enabled",
+    "files.associations": {
+        "compare": "c",
+        "idtloader.h": "c"
+    }
 }

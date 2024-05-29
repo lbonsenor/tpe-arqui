@@ -2,14 +2,14 @@
 
 static unsigned long ticks = 0;
 
-void timer_handler() {
+void timerHandler() {
 	ticks++;
 }
 
-int ticks_elapsed() {
+int ticksElapsed() {
 	return ticks;
 }
 
-int seconds_elapsed() {
+int secondsElapsed() {
 	return ticks / 18;
 }

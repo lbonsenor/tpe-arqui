@@ -3,6 +3,8 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <videoDriver.h>
+#include <idtLoader.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -37,6 +39,8 @@ void * initializeKernelBinary() {
 	return getStackBase();
 }
 
-int main() {	
+int main() {
+	printNoColor("Main start");
+	load_idt();
 	return 0;
 }
