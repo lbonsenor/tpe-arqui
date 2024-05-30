@@ -171,10 +171,6 @@ uint64_t set_cursor_to_line(uint64_t line){
 }
 //works ok!
 uint64_t get_registers(uint64_t buffer ){
-    char buffer2[10];
-    intToStr(has_regs,buffer2,10);
-    print(buffer2);
-    print("\n");
     if(has_regs){
         for(int i = 0; i<17 ; i++){
             ((uint64_t * ) buffer)[i] = show_registers_dump[i];

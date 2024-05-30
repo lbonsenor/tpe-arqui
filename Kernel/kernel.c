@@ -48,31 +48,22 @@ void * initializeKernelBinary() {
 
 int main() {
 	load_IDT();
-	scaleUp();
 	print("Welcome to kaOS!\n");
 	//playMelody(); // funcion para testear sound.c
 	print("Music's over :c\n");
-	char buffer[20];
-	int time1 = get_current_time();
-	print("Hi");
-	intToStr(time1, buffer,10);
-	print("\n");
-	print(buffer);
-	print("\n");	
-	wait(1000);
-	time1= get_current_time();
-	intToStr(time1, buffer, 10);
-	print(buffer);
-	print("\n");
 	wait(2000);
 	int i = 0;
+	print("Press \\ctrl key ");
+	print("\n");
 	while(i<10000){
 		i++;
 	} 
+	print("Registers:");
+	print("\n");
 	uint64_t registers[17];
-	save_registers(registers);
+	get_registers(registers);
 	for(int i = 0; i<17; i++){
-		buffer[10];
+		char buffer[10];
 		intToStr(registers[i],buffer,10);
 		print(buffer);
 		print("\n");
