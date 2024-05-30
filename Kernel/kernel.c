@@ -49,7 +49,7 @@ void * initializeKernelBinary() {
 int main() {
 	load_IDT();
 	print("Welcome to kaOS!\n");
-	//playMelody(); // funcion para testear sound.c
+	playMelody(); // funcion para testear sound.c
 	print("Music's over :c\n");
 	wait(2000);
 	int i = 0;
