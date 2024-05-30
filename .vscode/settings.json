@@ -8,6 +8,7 @@
         "moduleloader.h": "c",
         "lib.h": "c",
         "interrupts.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "syscallhandler.h": "c"
     }
 }
