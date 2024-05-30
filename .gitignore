@@ -1,5 +1,3 @@
-.DS_Store
-
 #Binary Files
 *.bin
 *.sys
@@ -11,4 +9,5 @@
 
 #Object files
 *.o
-/.vscode
+*.elf
+run.sh

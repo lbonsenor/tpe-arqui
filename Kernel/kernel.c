@@ -4,7 +4,14 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <videoDriver.h>
-#include <keyboardDriver.h>
+#include <idtLoader.h>
+#include <sound.h>
+#include <time.h>
+#include <syscallHandler.h>
+
+extern uint64_t getSeconds();
+extern uint16_t getMinutes();
+extern uint16_t getHours();
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -20,14 +27,11 @@ static void * const sampleDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
 
-
-void clearBSS(void * bssAddress, uint64_t bssSize)
-{
+void clearBSS(void * bssAddress, uint64_t bssSize) {
 	memset(bssAddress, 0, bssSize);
 }
 
-void * getStackBase()
-{
+void * getStackBase() {
 	return (void*)(
 		(uint64_t)&endOfKernel
 		+ PageSize * 8				//The size of the stack itself, 32KiB
@@ -35,23 +39,35 @@ void * getStackBase()
 	);
 }
 
-void * initializeKernelBinary()
-{
-	void * moduleAddresses[] = {
-		sampleCodeModuleAddress,
-		sampleDataModuleAddress
-	};
-
+void * initializeKernelBinary() {
+	void * moduleAddresses[] = {sampleCodeModuleAddress, sampleDataModuleAddress };
 	loadModules(&endOfKernelBinary, moduleAddresses);
-
 	clearBSS(&bss, &endOfKernel - &bss);
 	return getStackBase();
 }
 
 int main() {
-	scaleUp();
-	scaleUp();
-	scaleUp();
-	printKey();
+	load_IDT();
+	print("Welcome to kaOS!\n");
+	playMelody(); // funcion para testear sound.c
+	print("Music's over :c\n");
+	wait(2000);
+	int i = 0;
+	print("Press \\ctrl key ");
+	print("\n");
+	while(i<10000){
+		i++;
+	} 
+	print("Registers:");
+	print("\n");
+	uint64_t registers[17];
+	get_registers(registers);
+	for(int i = 0; i<17; i++){
+		char buffer[10];
+		intToStr(registers[i],buffer,10);
+		print(buffer);
+		print("\n");
+	}
+
 	return 0;
 }

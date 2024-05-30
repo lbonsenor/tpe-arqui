@@ -1,5 +1,7 @@
 //Source: https://www.mikrocontroller.net/topic/459675
+
 #include <stdint.h>
+
 #ifndef VIDEO_FONT
 #define VIDEO_FONT
 

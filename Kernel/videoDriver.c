@@ -2,6 +2,8 @@
 #include <font.h>
 #include <lib.h>
 
+#define GREEN 0x00159854
+
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
 	uint8_t window_a;			// deprecated
@@ -44,14 +46,16 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
-#define MAX_LINES (VBE_mode_info->height / (CHAR_HEIGHT * scale))
-#define MAX_CHARS (VBE_mode_info->width / (CHAR_WIDTH * scale))
-
 uint8_t scale = 1;
 
 // Cursor coordinates
 uint16_t cursorX = 0;
 uint16_t cursorY = 0;
+
+uint32_t textColor = GREEN;
+uint8_t getScale(){
+	return scale;
+}
 
 uint16_t getWidthPixels() {
 	return VBE_mode_info->width;
@@ -84,6 +88,7 @@ int scaleDown() {
 	return setScale(scale - 1);
 }
 
+// Returns 0 if successful
 int putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 	if (x >= getWidthPixels() || y >= getHeightPixels()) return 1;
 	// Caso de error: x o y superan el límite (andcho o alto)
@@ -95,24 +100,12 @@ int putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 	return 0;
 }
 
+// Returns 0 if successful
 int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int height) {
 	if (x + width > getWidthPixels() || y + height > getHeightPixels()) return 1;
 	for (int i = x; i < x + width; i++)
 	for (int j = y; j < y + height; j++)
 		putPixel(hexColor, i, j);
-	return 0;
-}
-
-int putChar(uint32_t hexColor, char c, uint64_t x, uint64_t y) {
-	if (c <= FIRST_CHAR || c >= LAST_CHAR) return 1;
-	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
-	for (int i = 0; i < CHAR_HEIGHT; i++)
-	for (int j = 0; j < CHAR_WIDTH; j++) {
-	uint32_t color = charGlyph[i] & (1 << j) ? hexColor : 0x000000;
-		for (int scaleX = 0; scaleX < scale; scaleX++)
-		for (int scaleY = 0; scaleY < scale; scaleY++)
-			putPixel(color, x + (7 - j) * scale + scaleX, (y + i) * scale + scaleY);
-	}
 	return 0;
 }
 
@@ -124,6 +117,7 @@ void clearScreen() {
 	cursorY = 0;
 }
 
+// Returns the color in hex
 uint32_t getPixelColor(uint64_t x, uint64_t y) {
 	uint8_t *framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
     uint64_t offset = (x * (VBE_mode_info->bpp / 8)) + (y * VBE_mode_info->pitch);
@@ -144,44 +138,79 @@ void setCursor(uint16_t x, uint16_t y) {
 	else cursorY = maxY;
 }
 
-int putCharCursor(uint32_t hexColor, char c) {
+uint16_t lineToHeight(unsigned int line) {
+	return line * (CHAR_HEIGHT * scale);
+}
+
+int heightToLine(uint16_t height) {
+	return height / (CHAR_HEIGHT * scale);
+}
+
+int setCursorLine(unsigned int line) {
+    if (line >= heightToLine(getHeightPixels())) return 1;
+    setCursor(cursorX, lineToHeight(line));
+    return 0;
+}
+
+// Returns 0 if successful
+int putChar(char c, uint64_t x, uint64_t y) {
+	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
+	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
+	for (int i = 0; i < CHAR_HEIGHT; i++) {
+		for (int j = 0; j < CHAR_WIDTH; j++) {
+			uint32_t color = charGlyph[i] & (1 << (CHAR_WIDTH - 1 - j)) ? textColor : 0x000000;
+			for (int scaleX = 0; scaleX < scale; scaleX++) {
+				for (int scaleY = 0; scaleY < scale; scaleY++) {
+					putPixel(color, x + j * scale + scaleX, y + i * scale + scaleY);
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+
+// Puts a char in the current cursor position. Returns 0 if successful
+int putCharCursor(char c) {
 	if (c == '\n') {
 		newLine();
 		return 0;
 	}
 	if (c == '\b') {
-		cursorX -= CHAR_WIDTH * scale;
-		putCharCursor(0x000000, ' ');
-		cursorX -= CHAR_WIDTH * scale;
-		return 0;
+		if (cursorX >= CHAR_WIDTH * scale) {
+			cursorX -= CHAR_WIDTH * scale;
+			putCharCursor(' ');
+			cursorX -= CHAR_WIDTH * scale;
+			return 0;
+		}
+		return 1;
 	}
-	// Not a valid character
-	if (c < FIRST_CHAR || c > LAST_CHAR) return 1;
-	const uint8_t * charGlyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - FIRST_CHAR);
-	for (int i = 0; i < CHAR_HEIGHT; i++)
-	for (int j = 0; j < CHAR_WIDTH; j++) {
-	uint32_t color = charGlyph[i] & (1 << j) ? hexColor : 0x000000;
-		for (int scaleX = 0; scaleX < scale; scaleX++)
-		for (int scaleY = 0; scaleY < scale; scaleY++)
-			putPixel(color, cursorX + (7 - j) * scale + scaleX, (cursorY + i) * scale + scaleY);
+	// Flag to indicate if the char was added successfully
+	int successFlag = putChar(c, cursorX, cursorY);
+	// Operation successful
+	if (successFlag == 0) {
+		cursorX += CHAR_WIDTH * scale;
+		if (cursorX >= getWidthPixels() - CHAR_WIDTH * scale) newLine();
 	}
-	cursorX += CHAR_WIDTH * scale;
-	if (cursorX > getWidthPixels() - CHAR_WIDTH * scale) newLine();
-	return 0;
+	return successFlag;
 }
 
-void print(uint32_t hexColor, char * str) {
-	for (; *str != '\0'; str++) putCharCursor(hexColor, *str);
+void print(char * str) {
+	for (; *str != '\0'; str++) putCharCursor(*str);
 }
 
-void println(uint32_t hexColor, char * str) {
-	print(hexColor, str);
+void println(char * str) {
+	print(str);
 	newLine();
 }
 
-void newLine() {
+void setColor(uint32_t newColor) {
+	textColor = newColor;
+}
+
+void newLine() {	
 	cursorX = 0;
-	if (cursorY + 2 * CHAR_HEIGHT * scale <= getHeightPixels()) cursorY += CHAR_HEIGHT;
+	if (cursorY + 2 * CHAR_HEIGHT * scale <= getHeightPixels()) cursorY += CHAR_HEIGHT * scale;
 	else {
 		// Pointer to framebuffer
         void * dst = (void*) ((uint64_t) VBE_mode_info->framebuffer);
