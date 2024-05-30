@@ -169,7 +169,12 @@ uint64_t set_cursor_to_line(uint64_t line){
     setCursorLine( line );
     return 0;
 }
- uint64_t save_registers(uint64_t buffer ){
+//works ok!
+uint64_t get_registers(uint64_t buffer ){
+    char buffer2[10];
+    intToStr(has_regs,buffer2,10);
+    print(buffer2);
+    print("\n");
     if(has_regs){
         for(int i = 0; i<17 ; i++){
             ((uint64_t * ) buffer)[i] = show_registers_dump[i];
@@ -177,11 +182,10 @@ uint64_t set_cursor_to_line(uint64_t line){
     }
     return 1;
 }
-
-uint64_t wait(uint64_t time_in_millis){
-    uint64_t time = millisElapsed();
-    do{ _hlt(); }
-    while(millisElapsed()- time > time_in_millis);
+//works ok
+uint64_t wait(uint64_t millis){
+    int delta = millis * 18 /1000;
+    timer_wait( delta);
     return 0;
 }
 

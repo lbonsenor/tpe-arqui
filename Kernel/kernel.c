@@ -56,8 +56,27 @@ int main() {
 	int time1 = get_current_time();
 	print("Hi");
 	intToStr(time1, buffer,10);
-	print(time1);
-	print("Hi");
 	print("\n");
+	print(buffer);
+	print("\n");	
+	wait(1000);
+	time1= get_current_time();
+	intToStr(time1, buffer, 10);
+	print(buffer);
+	print("\n");
+	wait(2000);
+	int i = 0;
+	while(i<10000){
+		i++;
+	} 
+	uint64_t registers[17];
+	save_registers(registers);
+	for(int i = 0; i<17; i++){
+		buffer[10];
+		intToStr(registers[i],buffer,10);
+		print(buffer);
+		print("\n");
+	}
+
 	return 0;
 }

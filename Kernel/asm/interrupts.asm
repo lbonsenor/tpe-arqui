@@ -208,6 +208,7 @@ saveRegs:
         mov rax , [rsp + 14*8]
         mov [show_registers_dump], rax
 
+        mov byte[has_regs], 1
         ; EOI
         mov al, 20h
         out 20h, al

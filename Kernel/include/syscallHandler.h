@@ -23,7 +23,7 @@ uint64_t syscallHandler(uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10
  uint32_t get_pix(uint64_t x, uint64_t y);
  uint64_t get_max_lines();
  uint64_t set_cursor_to_line(uint64_t line);
- uint64_t save_registers(uint64_t buffer );
+ uint64_t get_registers(uint64_t buffer );
  uint64_t wait(uint64_t time_in_millis);
 
 #endif
