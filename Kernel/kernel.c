@@ -10,6 +10,7 @@
 #include <syscallHandler.h>
 
 extern uint64_t resetMain();
+extern uint64_t show_registers[17];
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -56,16 +57,6 @@ int main() {
 	while(i<10000){
 		i++;
 	} 
-	print("Registers:");
-	print("\n");
-	uint64_t registers[17];
-	get_registers(registers);
-	for(int i = 0; i<17; i++){
-		char buffer[10];
-		intToStr(registers[i],buffer,10);
-		print(buffer);
-		print("\n");
-	}
-	resetMain();
+	//first give welcome message, then open shell
 	return 0;
 }

@@ -15,7 +15,7 @@ GLOBAL _exception6Handler
 
 GLOBAL show_registers_dump
 GLOBAL has_regs
-
+GLOBAL show_registers
 EXTERN exceptionDispatcher
 EXTERN syscallHandler
 EXTERN irqDispatcher
