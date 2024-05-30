@@ -5,8 +5,9 @@
 #include <sound.h>
 
 
+
 //Play sound using built in speaker
- static void play_sound(uint32_t nFrequence) {
+ void play_sound(uint32_t nFrequence) {
  	uint32_t Div;
  	uint8_t tmp;
  
@@ -24,7 +25,7 @@
  }
  
  //make it shutup
- static void nosound() {
+  void nosound() {
  	uint8_t tmp = inb(0x61) & 0xFC;
  
  	outb(0x61, tmp);

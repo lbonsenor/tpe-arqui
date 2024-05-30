@@ -53,6 +53,9 @@ uint16_t cursorX = 0;
 uint16_t cursorY = 0;
 
 uint32_t textColor = GREEN;
+uint8_t getScale(){
+	return scale;
+}
 
 uint16_t getWidthPixels() {
 	return VBE_mode_info->width;
@@ -144,10 +147,7 @@ int heightToLine(uint16_t height) {
 }
 
 int setCursorLine(unsigned int line) {
-	// Gets max line
-	if (line >= heightToLine(getHeightPixels())) return 1;
-	setCursor(cursorX, lineToHeight(line));
-	return 0;
+	return setCursorLine(line);
 }
 
 // Returns 0 if successful

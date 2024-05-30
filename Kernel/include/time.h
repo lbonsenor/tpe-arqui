@@ -5,5 +5,5 @@
 void timerHandler();
 int ticksElapsed();
 int secondsElapsed();
-uint64_t getTime();
+int millisElapsed();
 #endif

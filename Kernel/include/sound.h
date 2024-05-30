@@ -30,6 +30,7 @@ void beep(/* int freq, int duration */);
 void playNoteSound(int freq, int duration, int waitAfter);
 
 void playMelody();
+void nosound();
 
 
 #endif /* SOUND_H */

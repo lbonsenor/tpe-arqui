@@ -7,6 +7,11 @@
 #include <idtLoader.h>
 #include <sound.h>
 #include <time.h>
+#include <syscallHandler.h>
+
+extern uint64_t getSeconds();
+extern uint16_t getMinutes();
+extern uint16_t getHours();
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -45,7 +50,28 @@ int main() {
 	load_IDT();
 	scaleUp();
 	print("Welcome to kaOS!\n");
-	playMelody(); // funcion para testear sound.c
+	//playMelody(); // funcion para testear sound.c
 	print("Music's over :c\n");
+	char buffer[10];
+	int i = 0 ;
+	
+	uint64_t lines = getHeightChars();
+	intToStr(lines,buffer,10);
+	print( buffer );
+	print("\n");
+	i++;
+	lines = get_width_ch();
+	intToStr(lines,buffer,10);
+	print( buffer );
+	print("\n");
+	//make_sound(SOL, 1, 0);
+	//draw_rect(0xFFFFFF, 10, 100,100,300);
+
+	//set_cursor_to_line(15);
+	print("hi");
+	while(1);
 	return 0;
+
+
+
 }

@@ -9,6 +9,7 @@ uint16_t getHeightChars();
 /* Scale functions */
 int scaleUp();
 int scaleDown();
+uint8_t getScale();
 
 /* Put functions */
 int putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
@@ -29,3 +30,6 @@ void setColor(uint32_t newColor);
 uint32_t getPixelColor(uint64_t x, uint64_t y);
 
 int drawRectangle(uint32_t hexColor, uint64_t x, uint64_t y, int width, int height);
+
+uint16_t lineToHeight(unsigned int line);
+int heightToLine(uint16_t height);
