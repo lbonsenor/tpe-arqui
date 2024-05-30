@@ -8,4 +8,6 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 
 char *cpuVendor(char *result);
 
+void intToString(int num, char* str, int base);
+
 #endif

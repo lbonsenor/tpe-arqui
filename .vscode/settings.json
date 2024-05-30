@@ -7,6 +7,7 @@
         "naiveconsole.h": "c",
         "moduleloader.h": "c",
         "lib.h": "c",
-        "interrupts.h": "c"
+        "interrupts.h": "c",
+        "stdint.h": "c"
     }
 }
