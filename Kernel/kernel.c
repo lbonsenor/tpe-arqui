@@ -9,9 +9,7 @@
 #include <time.h>
 #include <syscallHandler.h>
 
-extern uint64_t getSeconds();
-extern uint16_t getMinutes();
-extern uint16_t getHours();
+extern uint64_t resetMain();
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -49,7 +47,7 @@ void * initializeKernelBinary() {
 int main() {
 	load_IDT();
 	print("Welcome to kaOS!\n");
-	playMelody(); // funcion para testear sound.c
+	//playMelody(); // funcion para testear sound.c
 	print("Music's over :c\n");
 	wait(2000);
 	int i = 0;
@@ -68,6 +66,6 @@ int main() {
 		print(buffer);
 		print("\n");
 	}
-
+	resetMain();
 	return 0;
 }
