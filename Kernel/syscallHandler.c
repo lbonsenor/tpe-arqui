@@ -232,7 +232,7 @@ uint64_t syscallHandler(uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10
             set_cursor_to_line(rdi);
             break;
         case 18:
-            return save_registers(rdi);
+            return get_registers(rdi);
         case 35:
             wait(rdi);
             break;
