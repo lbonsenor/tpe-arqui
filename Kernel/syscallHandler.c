@@ -6,6 +6,8 @@
 #include <interrupts.h>
 #include <font.h>
 
+#include <lib.h>
+
 #include <syscallHandler.h>
 
 #define STDIN 0
@@ -76,10 +78,11 @@ extern uint16_t getSeconds();
     }
 }
 
-//works ok
  uint64_t get_current_time(){
     uint16_t hours = getHours();
-    if(hours > 3){
+    char buffer[10];
+    
+    if(hours >= 3){
         hours -= 3;
     }
     else if(hours == 2){
@@ -91,7 +94,7 @@ extern uint16_t getSeconds();
     else if( hours == 0){
         hours == 21;
     }
-    return (uint64_t)(hours*10000) +(getMinutes()*100) + (getSeconds());
+    return (uint64_t )((hours*10000) +(getMinutes()*100) + (getSeconds()));
 }
 //works ok
  uint64_t elapsed_millis(){
@@ -158,8 +161,8 @@ extern uint16_t getSeconds();
  uint64_t get_max_lines(){
     return getHeightChars();
 }
-
- uint64_t set_cursor_to_line(uint64_t line){
+//works ok
+uint64_t set_cursor_to_line(uint64_t line){
     if(line >= get_max_lines()){
         return 1;
     }
@@ -175,7 +178,7 @@ extern uint16_t getSeconds();
     return 1;
 }
 
- uint64_t wait(uint64_t time_in_millis){
+uint64_t wait(uint64_t time_in_millis){
     uint64_t time = millisElapsed();
     do{ _hlt(); }
     while(millisElapsed()- time > time_in_millis);

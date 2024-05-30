@@ -147,7 +147,9 @@ int heightToLine(uint16_t height) {
 }
 
 int setCursorLine(unsigned int line) {
-	return setCursorLine(line);
+    if (line >= heightToLine(getHeightPixels())) return 1;
+    setCursor(cursorX, lineToHeight(line));
+    return 0;
 }
 
 // Returns 0 if successful

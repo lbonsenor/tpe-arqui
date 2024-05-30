@@ -52,26 +52,12 @@ int main() {
 	print("Welcome to kaOS!\n");
 	//playMelody(); // funcion para testear sound.c
 	print("Music's over :c\n");
-	char buffer[10];
-	int i = 0 ;
-	
-	uint64_t lines = getHeightChars();
-	intToStr(lines,buffer,10);
-	print( buffer );
+	char buffer[20];
+	int time1 = get_current_time();
+	print("Hi");
+	intToStr(time1, buffer,10);
+	print(time1);
+	print("Hi");
 	print("\n");
-	i++;
-	lines = get_width_ch();
-	intToStr(lines,buffer,10);
-	print( buffer );
-	print("\n");
-	//make_sound(SOL, 1, 0);
-	//draw_rect(0xFFFFFF, 10, 100,100,300);
-
-	//set_cursor_to_line(15);
-	print("hi");
-	while(1);
 	return 0;
-
-
-
 }
