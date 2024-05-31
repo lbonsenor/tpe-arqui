@@ -5,7 +5,7 @@ extern uint64_t sysCall(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx 
 // deberia usar el strlen en vez del 1 despues del buffer.
 // aca en vez de 1 deberia ser 4
 void print(char* buffer){
-    sysCall(1,1,buffer,1,0,0); 
+    sysCall(1,1,(uint64_t)buffer,1,0,0); 
    
 }
 void make_sound(int note, int frequency, int wait){
