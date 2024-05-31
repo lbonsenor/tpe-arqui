@@ -3,6 +3,7 @@
 #define LEFT 1
 #define DOWN 2
 #define RIGHT 3
+#define SPEED 5
 
 char p1Keys[4] = {'w', 'a', 's', 'd'};
 char p1Keys[4] = {'i','j', 'k', 'l'};
