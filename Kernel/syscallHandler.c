@@ -62,14 +62,14 @@ extern uint16_t getSeconds();
     char readCharacter;
     
     while (i < length && (readCharacter = getFromBuffer()) != '\0' ){
-            bufferPosition[i] = readCharacter;
-            i++;
+        bufferPosition[i] = readCharacter;
+        i++;
     }
     return i;
 } 
 // i s
  uint64_t write(uint64_t fileDescriptor, uint64_t buffer , uint64_t length){
-    if (length > 0) print("holis");
+    
     if(fileDescriptor != STDOUT){
         return 1;
     }
@@ -189,7 +189,8 @@ uint64_t wait(uint64_t millis){
 uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8) {
     switch (rax){
         case 0:
-            return read(rdi, rsi , r10);
+            return read(rdi, rsi , rdx);
+            break;
         case 1:
             return write(rdi,rsi,rdx);
         case 2:

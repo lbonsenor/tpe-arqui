@@ -37,7 +37,6 @@ char isAlpha(char c) {
 void addToBuffer(char c) {
     // Resets the index if the buffer is full
     if (writeIndex >= BUFFER_SIZE) writeIndex = 0;
-    putCharCursor(c);
     buffer[writeIndex++] = c;
     
 }
