@@ -1,22 +1,35 @@
 #include "libSysCalls.h"
 #define BUFFER_SIZE 1024
-void shell(){
-   
-   char buffer[BUFFER_SIZE];
-    scaleUp();
-    scaleUp();
-   // while(1){
-        
-         print("kaOS >>>>>>>>>>>>>>\n"); // funciona write
+#define COMMANDS_SIZE 8
 
-         drawRectangle(0xFFFFFF,20,20,200,200);
-        // i++;
-         //();
-   // }
-   
-   
-    //readBuffer("hell"); // no entiendo q me deberia hacer read...
-   // clearScreen(); //funciona limpia pantalla.
-    //drawRectangle();
-    //showTime();
+char buffer[BUFFER_SIZE] = {'\0'};
+static char* commands[] = {"help", "time", "eliminator", "eliminator2", "regs", "clear", "scaledown", "scaleup"};
+
+int isCommand(char * str, int command){
+      if (command >= COMMANDS_SIZE) return -1;
+
+      int i = 0;
+      for (; str[i] != '\0' && commands[command][i] != '\0'; i++)
+            if (str[i] != commands[command][i]) return 0;   
+      
+      return str[i] == commands[command][i];    // Checking if they have the same length 
+}
+
+int findCommand(char * str){
+      for (int i = 0; i < COMMANDS_SIZE; i++)
+            if (isCommand(str, i)) return i;
+            
+      return -1;
+}
+
+void executeCommand(char * str){
+
+}
+
+void shell(){
+      print("Welcome to kaOS! Please input your command\n");
+      print("kaOS >");
+      readBuffer(buffer, BUFFER_SIZE);
+      print(buffer);  
+      
 }

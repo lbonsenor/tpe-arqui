@@ -1,5 +1,5 @@
 #include<stdint.h>
-extern uint64_t sysCall(uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t , uint64_t);
+extern uint64_t sysCall(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8);
 
 
 // deberia usar el strlen en vez del 1 despues del buffer.
@@ -10,8 +10,8 @@ void print(char* buffer){
 }
 
 //0 en rax, en realidad deberia ser 3
-uint64_t readBuffer(char* buffer){
-    return sysCall(0,0,buffer, 5,0,0);  //nose que hace read la verdad
+uint64_t readBuffer(char* buffer, uint64_t length){
+    return sysCall(0,0,buffer,0,length,0);  //nose que hace read la verdad
 }
 
 void clearScreen(){

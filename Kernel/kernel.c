@@ -49,20 +49,7 @@ void * initializeKernelBinary() {
 
 int main() {
 	load_IDT();
-	print("Welcome to kaOS!\n");
-	
-	//playMelody(); // funcion para testear sound.c
-	//print("Music's over :c\n");
-	//wait(2000);
-	int i = 0;
-	//print("Press \\ctrl key ");
-	print("\n");
-	
-	//printtest();
-	// while(i<10000){
-	// 	i++;
-	// } 
-	//first give welcome message, then open shell
 	((EntryPoint)sampleCodeModuleAddress)();
+	
 	return 0;
 }

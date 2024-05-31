@@ -90,7 +90,8 @@ void cleanBuffer() {
 }
 
 char getFromBuffer() {
-    if (readIndex < BUFFER_SIZE) readIndex = 0;
+    if (readIndex == writeIndex) return 0;
+    if (readIndex >= BUFFER_SIZE) readIndex = 0;
     return buffer[readIndex++];
 }
 
