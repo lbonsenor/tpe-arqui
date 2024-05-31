@@ -4,27 +4,40 @@ extern uint64_t sysCall(uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rdx, 
 
 // deberia usar el strlen en vez del 1 despues del buffer.
 // aca en vez de 1 deberia ser 4
-uint64_t print(char* buffer){
-    return sysCall(1,1,buffer,1,0,0); 
+void print(char* buffer){
+    sysCall(1,1,buffer,1,0,0); 
    
 }
 
 //0 en rax, en realidad deberia ser 3
 uint64_t readBuffer(char* buffer){
-    return sysCall(0,0,buffer, 5,0,0); 
+    return sysCall(0,0,buffer, 5,0,0);  //nose que hace read la verdad
 }
 
 void clearScreen(){
-    return sysCall(7,0,0,0,0,0);
+    sysCall(7,0,0,0,0,0);
 }
 
-void drawRectangle(int posX, int posY){
-    
+void drawRectangle(uint64_t color, uint64_t posX, uint64_t posY, uint64_t width, uint64_t height){
+    //agregar validaciones: que el x sea valido, que la y no se pase, etc. 
+    sysCall(9,color,posX,posY,width,height);
 }
 
 void showTime(){
     // readBuffer(sysCall(2,0,0,0,0,0)); no me funciona esto
 } 
+
+void scaleUp(){
+    sysCall(10,0,0,0,0,0);
+}
+
+void scaleDown(){
+    sysCall(11,0,0,0,0,0);
+}
+
+//void put_pixel(uint64_t ){
+    
+//}
 
 // case 2:
 //             return get_current_time();
@@ -37,17 +50,10 @@ void showTime(){
 //         case 6:
 //             clear_line(rdi);
 //             break;
-//         case 7:
-//             clear_screen();
-//             break;
 //         case 8:
 //             return put_pixel(rdi,rdi,rdx);
 //         case 9:
 //             return draw_rect(rdi,rsi,rdx,r10,r8);
-//         case 10:
-//             return scale_up();
-//         case 11:
-//             return scale_down();
 //         case 12:
 //             return make_sound(rdi,rsi,rdx);
 //         case 13:
