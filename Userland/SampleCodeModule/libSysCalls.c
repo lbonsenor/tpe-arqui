@@ -8,10 +8,13 @@ void print(char* buffer){
     sysCall(1,1,buffer,1,0,0); 
    
 }
+void make_sound(int note, int frequency, int wait){
+    sysCall((uint64_t) 12, (uint64_t) note, (uint64_t) frequency, (uint64_t)wait, 0,0);
+}
 
 //0 en rax, en realidad deberia ser 3
 uint64_t readBuffer(char* buffer, uint64_t length){
-    return sysCall(0,0,buffer,0,length,0);  //nose que hace read la verdad
+    return sysCall(0,0,(uint64_t )buffer,0,length,0);  //nose que hace read la verdad
 }
 
 void clearScreen(){

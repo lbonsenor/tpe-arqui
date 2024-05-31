@@ -2,7 +2,7 @@
 #define BUFFER_SIZE 1024
 #define COMMANDS_SIZE 8
 
-char buffer[BUFFER_SIZE] = {'\0'};
+char buffer[BUFFER_SIZE];
 static char* commands[] = {"help", "time", "eliminator", "eliminator2", "regs", "clear", "scaledown", "scaleup"};
 
 int isCommand(char * str, int command){
@@ -29,7 +29,13 @@ void executeCommand(char * str){
 void shell(){
       print("Welcome to kaOS! Please input your command\n");
       print("kaOS >");
-      readBuffer(buffer, BUFFER_SIZE);
-      print(buffer);  
       
+      int i;
+      while(i<300){
+            i++;
+      }
+      readBuffer(buffer, BUFFER_SIZE);
+      make_sound(393,10,0);
+      drawRectangle(0xFF0000,100,100,300,100);
+      print(buffer);
 }

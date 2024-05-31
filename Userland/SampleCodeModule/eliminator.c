@@ -6,7 +6,7 @@
 #define SPEED 5
 
 char p1Keys[4] = {'w', 'a', 's', 'd'};
-char p1Keys[4] = {'i','j', 'k', 'l'};
+char p2Keys[4] = {'i','j', 'k', 'l'};
 
 char p1Dir = DOWN;
 char p2Dir = UP;

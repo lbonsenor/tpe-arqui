@@ -171,8 +171,8 @@ _int80Handler:
 	; syscallHandler:	RDI RSI RDX R10 R8  RAX
 	; params in C are:	RDI RSI RDX RCX R8  R9
     pushState
-    mov rcx, r10
-	mov r9, rax
+    ; mov rcx, r10
+	; mov r9, rax -> we will be calling all params from c so its the same
     call syscallHandler
     popState
 	iretq
