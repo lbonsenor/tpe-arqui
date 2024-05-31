@@ -14,7 +14,7 @@ void make_sound(int note, int frequency, int wait){
 
 //0 en rax, en realidad deberia ser 3
 uint64_t readBuffer(char* buffer, uint64_t length){
-    return sysCall(0,0,(uint64_t )buffer,0,length,0);  //nose que hace read la verdad
+    return sysCall(0,(uint64_t )buffer,length,0,0,0);  //nose que hace read la verdad
 }
 
 void clearScreen(){
@@ -37,7 +37,11 @@ void scaleUp(){
 void scaleDown(){
     sysCall(11,0,0,0,0,0);
 }
-
+char getChar(){
+    char v[]={0};
+    sysCall(0,v,1,0,0,0);
+    return v[0];
+}
 //void put_pixel(uint64_t ){
     
 //}

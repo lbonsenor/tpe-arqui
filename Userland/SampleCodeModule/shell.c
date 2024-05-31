@@ -31,11 +31,13 @@ void shell(){
       print("kaOS >");
       
       int i;
-      while(i<300){
+      while(i<3000){
             i++;
+            print("hi");
       }
-      readBuffer(buffer, BUFFER_SIZE);
+      readBuffer(buffer, 30);
       make_sound(393,10,0);
       drawRectangle(0xFF0000,100,100,300,100);
       print(buffer);
+
 }
