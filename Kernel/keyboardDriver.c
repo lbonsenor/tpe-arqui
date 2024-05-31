@@ -86,6 +86,7 @@ void removeCharFromBuffer() {
 void cleanBuffer() {
     memset(buffer, '\0', writeIndex);
     writeIndex = 0;
+    readIndex = 0;
 }
 
 char getFromBuffer() {
