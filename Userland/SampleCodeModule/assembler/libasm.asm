@@ -40,7 +40,7 @@ section .text
 
 sysCall:
 
-	pushState
+	; pushState
 	
 	push rbp;
 	mov rbp, rsp;
@@ -48,7 +48,7 @@ sysCall:
 
 	mov rsp, rbp;
 	pop rbp;
-	popState
+	; popState
 	ret	
 
 

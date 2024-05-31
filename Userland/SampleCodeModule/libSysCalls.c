@@ -37,10 +37,10 @@ void scaleUp(){
 void scaleDown(){
     sysCall(11,0,0,0,0,0);
 }
+
 char getChar(){
-    char v[]={0};
-    sysCall(0,1,v,1,0,0);
-    return v[0];
+    char c = sysCall(19,0,0,0,0,0);
+    return c;
 }
 //void put_pixel(uint64_t ){
     

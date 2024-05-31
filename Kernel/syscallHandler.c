@@ -60,13 +60,15 @@ extern uint16_t getSeconds();
     char * bufferPosition = (char *) buffer;
     int i =0;
     char readCharacter;
-    
+    cleanRead();
+
     while (i < length && (readCharacter = getFromBuffer()) != '\0' ){
         bufferPosition[i] = readCharacter;
         i++;
     }
+    bufferPosition[i] = '\0';
     return i;
-} 
+}
 // i s
  uint64_t write(uint64_t fileDescriptor, uint64_t buffer , uint64_t length){
     
@@ -186,6 +188,12 @@ uint64_t wait(uint64_t millis){
     return 0;
 }
 
+uint64_t get_char(uint64_t fileDescriptor){
+    if (fileDescriptor != STDIN ) return 0;
+    uint64_t c = getLastChar();
+    return c;
+}
+
 uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8) {
     switch (rax){
         case 0:
@@ -231,6 +239,8 @@ uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx 
             break;
         case 18:
             return get_registers(rdi);
+        case 19:
+            return get_char(rdi);
         case 35:
             wait(rdi);
             break;

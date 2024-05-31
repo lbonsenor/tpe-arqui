@@ -2,7 +2,6 @@
 #define BUFFER_SIZE 1024
 #define COMMANDS_SIZE 8
 
-char buffer[BUFFER_SIZE] = {'\0'};
 static char* commands[] = {"help", "time", "eliminator", "eliminator2", "regs", "clear", "scaledown", "scaleup"};
 
 int isCommand(char * str, int command){
@@ -26,29 +25,37 @@ void executeCommand(char * str){
 
 }
 
-
-int enterOnBuffer(){
-      print(buffer);
-      print("\n");
-      for (int i = 0; buffer[i] != '\0'; i++)
+void insertCommand(){
+      print("kaOS > ");
+      char buffer[BUFFER_SIZE] = {'\0'};
+      int bufferIndex = 0;
+      char c = 0;
+      while ((c = getChar()) != '\n' && bufferIndex < BUFFER_SIZE)
       {
-            if (buffer[i] == ' ') {
-                  return 1;
+            if (c != '\0'){
+                  char aux[2] = {c,'\0'};
+                  if (c == '\b' && bufferIndex > 0) {
+                        buffer[--bufferIndex] = '\0';
+                        print(aux);
+                  }
+                  else if (c != '\b') {
+                        buffer[bufferIndex++] = c;
+                        print(aux);
+                  }
+                  
+                  
             }
-      
       }
-      return 0;
+
 }
 
 
 void shell(){
       print("Welcome to kaOS! Please input your command\n");
-      print("kaOS >");
       
-      while(enterOnBuffer() == 0){
-            readBuffer(buffer, 30);
-      }
-      print("termino");
+      insertCommand();
+      
+      
       
 
 }
