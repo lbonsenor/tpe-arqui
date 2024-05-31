@@ -38,6 +38,18 @@ void scaleDown(){
     sysCall(11,0,0,0,0,0);
 }
 
+uint64_t getPixelColor(uint64_t x, uint64_t y){
+    return sysCall(15,x,y,0,0,0);
+}
+
+uint64_t getMaxWidth(){
+    return sysCall(14,0,0,0,0,0);
+}
+
+uint64_t getMaxHeight(){
+    return sysCall(13,0,0,0,0,0);
+}
+
 char getChar(){
     char c = sysCall(19,0,0,0,0,0);
     return c;

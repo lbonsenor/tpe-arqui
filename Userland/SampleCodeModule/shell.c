@@ -1,9 +1,10 @@
 #include "libSysCalls.h"
 #include "commands.h"
+#include "eliminator.h"
 #define BUFFER_SIZE 1024
-#define COMMANDS_SIZE 8
+#define COMMANDS_SIZE 7
 
-static char* commands[] = {"help", "time", "eliminator", "eliminator2", "regs", "clear", "scaledown", "scaleup"};
+static char* commands[] = {"help", "time", "eliminator", "regs", "clear", "scaledown", "scaleup"};
 
 int isCommand(char * str, int command){
       if (command >= COMMANDS_SIZE) return -1;
@@ -27,8 +28,7 @@ void executeCommand(char * str){
       {
       case 0: help(); break;
       case 1: time(); break;
-      case 2: eliminator1(); break;
-      case 3: eliminator2(); break;
+      case 2: eliminator(); break;
       case 4: regs(); break;
       case 5: clearScreen(); break;
       case 6: scaleDown(); break;
@@ -68,8 +68,5 @@ void insertCommand(){
 void shell(){
       print("Welcome to kaOS! Please input your command\n");
       insertCommand();
-      
-      
-      
 
 }
