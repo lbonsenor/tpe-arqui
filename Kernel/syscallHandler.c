@@ -11,7 +11,7 @@
 #include <syscallHandler.h>
 
 #define STDIN 0
-#define STDOUT 0
+#define STDOUT 1
 #define STDERR 2
 #define KBDIN 3
 
@@ -185,7 +185,7 @@ uint64_t wait(uint64_t millis){
     return 0;
 }
 
-uint64_t syscallHandler(uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8 , uint64_t rax) {
+uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8) {
     switch (rax){
         case 0:
             return read(rdi, rsi , rdx);

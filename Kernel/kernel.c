@@ -9,6 +9,8 @@
 #include <time.h>
 #include <syscallHandler.h>
 
+extern void printtest();
+
 extern uint64_t resetMain();
 extern uint64_t show_registers[17];
 
@@ -48,15 +50,19 @@ void * initializeKernelBinary() {
 int main() {
 	load_IDT();
 	print("Welcome to kaOS!\n");
+	
 	//playMelody(); // funcion para testear sound.c
-	print("Music's over :c\n");
-	wait(2000);
+	//print("Music's over :c\n");
+	//wait(2000);
 	int i = 0;
-	print("Press \\ctrl key ");
+	//print("Press \\ctrl key ");
 	print("\n");
-	while(i<10000){
-		i++;
-	} 
+	
+	//printtest();
+	// while(i<10000){
+	// 	i++;
+	// } 
 	//first give welcome message, then open shell
+	((EntryPoint)sampleCodeModuleAddress)();
 	return 0;
 }
