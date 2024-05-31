@@ -1,4 +1,5 @@
 #include "libSysCalls.h"
+#include "commands.h"
 #define BUFFER_SIZE 1024
 #define COMMANDS_SIZE 8
 
@@ -22,7 +23,20 @@ int findCommand(char * str){
 }
 
 void executeCommand(char * str){
-
+      switch (findCommand(str))
+      {
+      case 0: help(); break;
+      case 1: time(); break;
+      case 2: eliminator1(); break;
+      case 3: eliminator2(); break;
+      case 4: regs(); break;
+      case 5: clearScreen(); break;
+      case 6: scaleDown(); break;
+      case 7: scaleUp(); break;
+      
+      default:
+            break;
+      }
 }
 
 void insertCommand(){
@@ -42,17 +56,17 @@ void insertCommand(){
                         buffer[bufferIndex++] = c;
                         print(aux);
                   }
-                  
-                  
             }
       }
-
+      print("\n\n");
+      executeCommand(buffer);
+      print("\n");
+      insertCommand();
 }
 
 
 void shell(){
       print("Welcome to kaOS! Please input your command\n");
-      
       insertCommand();
       
       
