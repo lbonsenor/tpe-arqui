@@ -3,7 +3,7 @@
 
 #define TIME_LENGTH 9
 
-void help(){
+void help() {
     print("Welcome to kaOS Manual! Here's the list of commands available");
     print("\n   time: Displays the current time in the format ??");
     print("\n   eliminator: Play Eliminator against yourself or a friend. Use WASD to move Player 1, IJKL to move Player 2");
@@ -13,13 +13,12 @@ void help(){
     print("\n   scaleup: Increment the text size (max: 4, default: 1)");
 }
 
-void time(){
+void time() {
     uint64_t time = getTime();
     char toReturn[TIME_LENGTH] = {'\0'};
 
     print("Current time is: ");
-    for (int i = TIME_LENGTH-2; i >= 0 ; i--)
-    {
+    for (int i = TIME_LENGTH-2; i >= 0 ; i--) {
         if (i == 2 || i == 5) toReturn[i] = ':';
         else {
             toReturn[i] = (time % 10) + '0';
@@ -69,9 +68,7 @@ char* itoa(int num, char* str) {
     }
 
     // If number is negative, append '-'
-    if (isNegative) {
-        str[i++] = '-';
-    }
+    if (isNegative) str[i++] = '-';
 
     str[i] = '\0'; // Append string terminator
 
@@ -82,18 +79,16 @@ char* itoa(int num, char* str) {
 }
 
 
-void regs(){
+void regs() {
     uint64_t buffer[17];
     getRegisters(buffer);
     char * registerNames[] = {"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"};
     print("Registers:\n");
-    for (int i = 0; i < 17; i++)
-    {
+    for (int i = 0; i < 17; i++) {
         char str[8] = {0};
         print(registerNames[i]); print(": ");
         print(itoa(buffer[i], str));
         print("\n");
     }
     return;
-    
 }

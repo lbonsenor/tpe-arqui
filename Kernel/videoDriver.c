@@ -53,7 +53,8 @@ uint16_t cursorX = 0;
 uint16_t cursorY = 0;
 
 uint32_t textColor = GREEN;
-uint8_t getScale(){
+
+uint8_t getScale() {
 	return scale;
 }
 

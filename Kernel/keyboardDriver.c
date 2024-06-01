@@ -40,7 +40,6 @@ void addToBuffer(char c) {
     if (writeIndex >= BUFFER_SIZE) writeIndex = 0;
     buffer[writeIndex++] = c;
     lastIndexFlag = 1;
-    
 }
 
 void keyboardHandler() {
@@ -84,11 +83,11 @@ void keyboardHandler() {
 }
 
 void removeCharFromBuffer() {
-  if (writeIndex > 1){
+  if (writeIndex > 1) {
+    // Removes '\b' and the character
     buffer[--writeIndex] = '\0';
-    buffer[--writeIndex] = '\0';    // Una vez que fue devuelto el backspace, borra los dos ultimos caracteres
+    buffer[--writeIndex] = '\0';
   }
-  
 }
 
 void cleanBuffer() {
@@ -108,15 +107,9 @@ char getFromBuffer() {
 }
 
 char getLastChar(){
-  if (lastIndexFlag == 1)
-  {
+  if (lastIndexFlag == 1) {
     lastIndexFlag = 0;
     return buffer[writeIndex-1];
   }
   return 0;
-}
-
-//used for debugging lol
-void printBuffer() {
-    print("Buffer");
 }
