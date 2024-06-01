@@ -26,7 +26,7 @@ uint64_t getPixelColor(uint64_t x, uint64_t y);
 
 void setCursorToLine(uint64_t line);
 
-void getRegisters(uint64_t * buffer);
+char getRegisters(uint64_t * buffer);
 
 void setCursor(uint64_t posx, uint64_t line);
 

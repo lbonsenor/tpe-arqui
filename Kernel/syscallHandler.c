@@ -157,8 +157,9 @@ uint64_t get_registers(uint64_t buffer) {
         for (int i = 0; i<17 ; i++) {
             ((uint64_t *) buffer)[i] = show_registers_dump[i];
         }
+        return 0;   
     }
-    return 0;
+    return 1;
 }
 
 uint64_t wait(uint64_t millis) {

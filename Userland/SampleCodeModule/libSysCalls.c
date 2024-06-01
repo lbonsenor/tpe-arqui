@@ -59,8 +59,8 @@ void setCursorToLine(uint64_t line) {
     syscall(17, line, 0, 0, 0, 0);
 }
 
-void getRegisters(uint64_t * buffer) {
-    syscall(18, (uint64_t) buffer, 0, 0, 0, 0);
+char getRegisters(uint64_t * buffer) {
+    return syscall(18, (uint64_t) buffer, 0, 0, 0, 0);
 }
 
 char getChar() {
