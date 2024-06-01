@@ -31,39 +31,10 @@ char * time(){
     return toReturn;
 }
 
-static char * itoa(uint64_t num){
-    int base = 10;
-    int i = 0;
-    char isNegative = 0;
-    char str[8] = {0};
-
-	// If the number is zero...
-    if (num == 0) {
-        str[i++] = '0';
-        str[i] = '\0';
-        return;
-    }
-
-    // If the number is negative...
-    if (num < 0) {
-        isNegative = 1;
-        num = -num;
-    }
-
-    while (num != 0) {
-        int rem = num % base;
-        str[i++] = rem + '0';
-        num = num / base;
-    }
-
-    // If the number is negative...
-    if (isNegative) str[i++] = '-';
-
-    str[i] = '\0';
-
-    // Reverse the string
+// Function to reverse a string
+void reverse(char str[], int length) {
     int start = 0;
-    int end = i - 1;
+    int end = length - 1;
     while (start < end) {
         char temp = str[start];
         str[start] = str[end];
@@ -71,17 +42,57 @@ static char * itoa(uint64_t num){
         start++;
         end--;
     }
+}
+
+// Function to implement itoa
+char* itoa(int num, char* str) {
+    int isNegative = 0;
+    int i = 0;
+
+    // Handle 0 explicitly
+    if (num == 0) {
+        str[i++] = '0';
+        str[i] = '\0';
+        return str;
+    }
+
+    // Check if number is negative
+    if (num < 0) {
+        isNegative = 1;
+        num = -num;
+    }
+
+    // Process individual digits
+    while (num != 0) {
+        int rem = num % 10;
+        str[i++] = rem + '0';
+        num = num / 10;
+    }
+
+    // If number is negative, append '-'
+    if (isNegative) {
+        str[i++] = '-';
+    }
+
+    str[i] = '\0'; // Append string terminator
+
+    // Reverse the string
+    reverse(str, i);
+
     return str;
 }
 
 
 void regs(){
     uint64_t buffer[17];
-    print("Registers:");
     getRegisters(buffer);
+    char * registerNames[] = {"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"};
+    print("Registers:\n");
     for (int i = 0; i < 17; i++)
     {
-        print(itoa(buffer[i]));
+        char * str[8];
+        print(registerNames[i]); print(": ");
+        print(itoa(buffer[i], str));
         print("\n");
     }
     return;
