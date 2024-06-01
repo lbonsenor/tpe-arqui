@@ -96,7 +96,7 @@ void cleanBuffer() {
     readIndex = 0;
 }
 
-void cleanRead(){
+void cleanRead() {
   readIndex = 0;
 }
 
@@ -106,7 +106,7 @@ char getFromBuffer() {
     return buffer[readIndex++];
 }
 
-char getLastChar(){
+char getLastChar() {
   if (lastIndexFlag == 1) {
     lastIndexFlag = 0;
     return buffer[writeIndex-1];

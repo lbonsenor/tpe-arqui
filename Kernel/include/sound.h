@@ -23,8 +23,8 @@
 #define SI2 987
 #define DO3 1046
 
-static void play_sound(uint32_t nFrequence);
-static void nosound();
+void play_sound(uint32_t nFrequence);
+void nosound();
 
 void beep(/* int freq, int duration */);
 

@@ -60,7 +60,7 @@ static void zero_division() {
 	print("\n");
 }
 
-static void wrong_opcode(){
+static void wrong_opcode() {
 	print("Wrong opcode");
 	print("\n");
 }
