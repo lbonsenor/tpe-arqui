@@ -27,6 +27,7 @@ void time() {
         }
     }
     print(toReturn);
+    print("\n");
     return;
 }
 
