@@ -20,7 +20,7 @@ EXTERN exceptionDispatcher
 EXTERN syscallHandler
 EXTERN irqDispatcher
 
-EXTERN printBuffer
+EXTERN print
 
 SECTION .text
 
@@ -146,8 +146,33 @@ _irq01Handler:
 	pushState
     in al, 0x60 ; readKey
     cmp al, 0x1D ; check if left CTRL is pressed (used to save registers)
-    je saveRegs
+    jne .continue
+            mov [show_registers_dump + (1*8)], rbx 
+        mov [show_registers_dump + (2*8)], rcx
+        mov [show_registers_dump + (3*8)], rdx 
+        mov [show_registers_dump + (4*8)], rsi 
+        mov [show_registers_dump + (5*8)], rdi
+        mov [show_registers_dump + (6*8)], rbp 
+        mov [show_registers_dump + (8*8)], r8
+        mov [show_registers_dump + (9*8)], r9
+        mov [show_registers_dump + (10*8)], r10
+        mov [show_registers_dump + (11*8)], r11
+        mov [show_registers_dump + (12*8)], r12
+        mov [show_registers_dump + (13*8)], r13
+        mov [show_registers_dump + (14*8)], r14
+        mov [show_registers_dump + (15*8)], r15 
 
+        ;RSP && RIP && RAX
+        mov rax , [rsp + 18*8] 
+        mov [show_registers_dump + (7*8)], rax
+        mov rax, [rsp + 15*8]
+        mov [show_registers_dump + (16*8)], rax
+        mov rax , [rsp + 14*8]
+        mov [show_registers_dump], rax
+
+        mov byte[has_regs], 1
+
+.continue:
     mov rdi, 1 ; param for dispatcher
     call irqDispatcher
         
@@ -182,39 +207,6 @@ haltcpu:
 	hlt
 	ret
 
-;function to sav registers in keyboard interruption
-; order same as before (exc) but rax at the end
-saveRegs:
-        mov [show_registers_dump + (1*8)], rbx 
-        mov [show_registers_dump + (2*8)], rcx
-        mov [show_registers_dump + (3*8)], rdx 
-        mov [show_registers_dump + (4*8)], rsi 
-        mov [show_registers_dump + (5*8)], rdi
-        mov [show_registers_dump + (6*8)], rbp 
-        mov [show_registers_dump + (8*8)], r8
-        mov [show_registers_dump + (9*8)], r9
-        mov [show_registers_dump + (10*8)], r10
-        mov [show_registers_dump + (11*8)], r11
-        mov [show_registers_dump + (12*8)], r12
-        mov [show_registers_dump + (13*8)], r13
-        mov [show_registers_dump + (14*8)], r14
-        mov [show_registers_dump + (15*8)], r15 
-
-        ;RSP && RIP && RAX
-        mov rax , [rsp + 18*8] 
-        mov [show_registers_dump + (7*8)], rax
-        mov rax, [rsp + 15*8]
-        mov [show_registers_dump + (16*8)], rax
-        mov rax , [rsp + 14*8]
-        mov [show_registers_dump], rax
-
-        mov byte[has_regs], 1
-        ; EOI
-        mov al, 20h
-        out 20h, al
-
-        popState
-        iretq
 
 SECTION .bss
     has_regs resb 1; to check whether we have saved or not!

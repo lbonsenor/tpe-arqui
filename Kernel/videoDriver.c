@@ -53,7 +53,8 @@ uint16_t cursorX = 0;
 uint16_t cursorY = 0;
 
 uint32_t textColor = GREEN;
-uint8_t getScale(){
+
+uint8_t getScale() {
 	return scale;
 }
 
@@ -91,8 +92,7 @@ int scaleDown() {
 // Returns 0 if successful
 int putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 	if (x >= getWidthPixels() || y >= getHeightPixels()) return 1;
-	// Caso de error: x o y superan el límite (andcho o alto)
-    uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
+    uint8_t * framebuffer = (uint8_t *) (uintptr_t) VBE_mode_info->framebuffer;
     uint64_t offset = (x * ((VBE_mode_info->bpp) / 8)) + (y * VBE_mode_info->pitch);
     framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF; 
@@ -119,7 +119,7 @@ void clearScreen() {
 
 // Returns the color in hex
 uint32_t getPixelColor(uint64_t x, uint64_t y) {
-	uint8_t *framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
+	uint8_t *framebuffer = (uint8_t *) (uintptr_t) VBE_mode_info->framebuffer;
     uint64_t offset = (x * (VBE_mode_info->bpp / 8)) + (y * VBE_mode_info->pitch);
     uint32_t hexColor = 0;
     hexColor |= framebuffer[offset];          	// Blue
@@ -168,7 +168,6 @@ int putChar(char c, uint64_t x, uint64_t y) {
 	}
 	return 0;
 }
-
 
 // Puts a char in the current cursor position. Returns 0 if successful
 int putCharCursor(char c) {

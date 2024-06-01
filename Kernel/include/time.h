@@ -3,8 +3,11 @@
 #include <stdint.h>
 
 void timerHandler();
+
 int ticksElapsed();
 int secondsElapsed();
 int millisElapsed();
+
 void timer_wait(int delta);
+
 #endif

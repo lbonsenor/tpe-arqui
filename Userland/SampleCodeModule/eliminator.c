@@ -23,9 +23,8 @@ uint32_t p2Color = 0x00FF00;
 int64_t p1Coord[2] = {0,0};    // pxCoord is a coordinate to center
 int64_t p2Coord[2] = {0,0};
 
-void changeDir(char c){
-    switch (c)
-    {
+void changeDir(char c) {
+    switch (c) {
         case 'w':   p1Dir = UP;
                     break;
         case 'a':   p1Dir = LEFT;
@@ -46,9 +45,8 @@ void changeDir(char c){
     }
 }
 
-void move(){
-    switch (p1Dir)
-    {
+void move() {
+    switch (p1Dir) {
     case UP:    p1Coord[1]--;
                 break;
     case LEFT:  p1Coord[0]--;
@@ -60,8 +58,7 @@ void move(){
     default:    break;
     }
 
-    switch (p2Dir)
-    {
+    switch (p2Dir) {
     case UP:    p2Coord[1]--;
                 break;
     case LEFT:  p2Coord[0]--;
@@ -74,7 +71,7 @@ void move(){
     }
 }
 
-int didLoose(int players){
+int didLose(int players) {
     int toReturn = 0;
     if (!(p1Coord[0] >= 0 && p1Coord[0] < width &&  
           p1Coord[1] >= 16 && p1Coord[1] < height && 
@@ -90,11 +87,10 @@ int didLoose(int players){
     
 }
 
-void loose(int whoLost, int pts){
+void lose(int whoLost, int pts) {
     make_sound(50, 4, 0);
     clearScreen();
-    switch (whoLost)
-    {                
+    switch (whoLost) {                
         case 1: print("\nPlayer 1 LOST! Do you want to play again? YES / NO?\n            (change decision with a or d)\n\n");break;
         case 2: print("\nPlayer 2 LOST! Do you want to play again? YES / NO?\n            (change decision with a or d)\n\n");break;
         case 3: print("\nPlayer 1 and 2 TIED! Want a rematch?      YES / NO?\n            (change decision with a or d)\n\n");break;
@@ -104,12 +100,11 @@ void loose(int whoLost, int pts){
     print("                  Y               N");
     print("\n\nPTS: ");
     char aux[7] = {0};
-    print(itoa(pts, aux));
+    print(itoa(pts, aux, 10));
 
     char c = 0;
     char currentDecision = 1;
-    while (c != '\n')
-    {
+    while (c != '\n') {
         c=getChar();
         switch (c)
         {
@@ -131,14 +126,14 @@ void loose(int whoLost, int pts){
     else clearScreen();
 }
 
-void printPts(int pts){
+void printPts(int pts) {
     setCursor(4, 0);
     print("PTS: ");
     char s[50] = {0};
-    print(itoa(pts, s));
+    print(itoa(pts, s, 10));
 }
 
-void play1(){
+void play1() {
     int counter = 0; // This counter is going to serve as a form of time checking for in-game velocity, it is unnecesary to make a syscall
     int lost = 0;
     int pts = 0;
@@ -156,15 +151,13 @@ void play1(){
     p2Dir = UP;
 
     char c;
-    while (lost == 0)
-    {
-        c=getChar();
+    while (lost == 0) {
+        c = getChar();
         changeDir(c);
 
-        if (counter == 0)
-        {
+        if (counter == 0) {
             move();
-            lost = didLoose(1);
+            lost = didLose(1);
             drawRectangle(p1Color, p1Coord[0], p1Coord[1], 1, 1);
         }
         counter++;
@@ -173,12 +166,11 @@ void play1(){
             printPts(pts);
             if (pts < MAX_POINTS) pts++;
         }
-        
     }
-    loose(lost, pts);
-
+    lose(lost, pts);
 }
-void play2(){
+
+void play2() {
     int counter = 0; // This counter is going to serve as a form of time checking for in-game velocity, it is unnecesary to make a syscall
     int lost = 0;    // 1 if Player 1 Lost, 2 if Player 2 Lost, 3 if tie
     int pts = 0;
@@ -200,28 +192,28 @@ void play2(){
     char c;
     while (lost == 0)
     {
-        c=getChar();
+        c = getChar();
         changeDir(c);
 
         if (counter == 0)
         {
             move();
-            lost = didLoose(2);
+            lost = didLose(2);
             drawRectangle(p1Color, p1Coord[0], p1Coord[1], 1, 1);
             drawRectangle(p2Color, p2Coord[0], p2Coord[1], 1, 1);
         }
         counter++;
-        if (counter >= SPEED){
+        if (counter >= SPEED) {
             counter = 0;
             printPts(pts);
             if (pts < MAX_POINTS) pts++;
         }
         
     }
-    loose(lost, pts);
+    lose(lost, pts);
 }
 
-void eliminator(){
+void eliminator() {
     clearScreen();
     print("\nPlease select the amount of players and press ENTER\n            (change decision with a or d)\n\n");
     print("                  1               2");
@@ -229,11 +221,9 @@ void eliminator(){
     make_sound(200, 1, 0);
     char c = 0;
     char currentDecision = 1;
-    while (c != '\n')
-    {
-        c=getChar();
-        switch (c)
-        {
+    while (c != '\n') {
+        c = getChar();
+        switch (c) {
         case 'a':
             drawRectangle(0xFFFFFF, 18*8, 16*5, 8, 1);
             drawRectangle(0x000000, 34*8, 16*5, 8, 1);
@@ -249,5 +239,4 @@ void eliminator(){
         }
     }
     currentDecision == 1 ? play1() : play2();
-    
 }

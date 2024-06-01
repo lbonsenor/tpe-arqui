@@ -27,8 +27,6 @@ extern uint16_t getSeconds();
 // syscallHandler:	RDI RSI RDX R10 R8  RAX
 // params in C are:	RDI RSI RDX RCX R8  R9
 
-
-
 /* Lets use the linux syscall codes for read and write
 0 - read (whole buffer)
 1 - write (whole buffer) ¿? esto estará bien ?
@@ -52,156 +50,138 @@ extern uint16_t getSeconds();
 35 - wait (copying linux system call nanosleep)
 */ 
 
-
- uint64_t read(uint64_t fileDescriptor , uint64_t buffer , uint64_t length){
-    if (fileDescriptor != STDIN ){
-        return 0;
-    }
+uint64_t read(uint64_t fileDescriptor, uint64_t buffer, uint64_t length) {
+    if (fileDescriptor != STDIN) return 0;
     char * bufferPosition = (char *) buffer;
     int i =0;
     char readCharacter;
     cleanRead();
-
-    while (i < length && (readCharacter = getFromBuffer()) != '\0' ){
+    while (i < length && (readCharacter = getFromBuffer()) != '\0') {
         bufferPosition[i] = readCharacter;
         i++;
     }
     bufferPosition[i] = '\0';
     return i;
 }
+
 // i s
- uint64_t write(uint64_t fileDescriptor, uint64_t buffer , uint64_t length){
-    
-    if(fileDescriptor != STDOUT){
-        return 1;
-    }
+uint64_t write(uint64_t fileDescriptor, uint64_t buffer , uint64_t length) {
+    if (fileDescriptor != STDOUT) return 1;
     else {
         print((char*)buffer);
         return 0;
     }
 }
 
- uint64_t get_current_time(){
+uint64_t get_current_time() {
     uint16_t hours = getHours();
-    
-    if(hours >= 3){
-        hours -= 3;
-    }
-    else if(hours == 2){
-        hours = 23;
-    }
-    else if(hours == 1){
-        hours = 22;
-    }
-    else if( hours == 0){
-        hours = 21;
-    }
-    return (uint64_t )((hours*10000) +(getMinutes()*100) + (getSeconds()));
+    if (hours >= 3) hours -= 3;
+    else if (hours == 2) hours = 23;
+    else if (hours == 1) hours = 22;
+    else if (hours == 0) hours = 21;
+    return (uint64_t) ((hours * 10000) + (getMinutes() * 100) + (getSeconds()));
 }
-//works ok
- uint64_t elapsed_millis(){
+
+uint64_t elapsed_millis() {
     return millisElapsed();
 }
-//works ok
- uint64_t get_height_ch(){
+
+uint64_t get_height_ch() {
     return getHeightChars();
 }
-//works ok
- uint64_t get_width_ch(){
+
+uint64_t get_width_ch() {
     return getWidthChars();
 }
-//works ok
- void clear_line(uint64_t line){
+
+void clear_line(uint64_t line) {
     int startY = lineToHeight(line); 
-    for(int i = 0; i< getWidthPixels(); i++){
+    for (int i = 0; i< getWidthPixels(); i++) {
         int heightCounter=0;
-        while(heightCounter < CHAR_HEIGHT * getScale()){
+        while(heightCounter < CHAR_HEIGHT * getScale()) {
             putPixel(0x000000, i , heightCounter+startY);
             heightCounter++;
         }
     }
 }
-//works ok
- void clear_screen(){
+
+void clear_screen() {
     clearScreen();
 }
-//works ok
- uint64_t put_pixel(uint64_t color , uint64_t x, uint64_t y){
+
+uint64_t put_pixel(uint64_t color , uint64_t x, uint64_t y) {
     return putPixel((uint32_t) color,  (uint64_t) x , (uint64_t) y);
 }
-//works ok
- uint64_t draw_rect(uint64_t hexColor, uint64_t x, uint64_t y, uint64_t width , uint64_t height){
+
+uint64_t draw_rect(uint64_t hexColor, uint64_t x, uint64_t y, uint64_t width , uint64_t height) {
     return drawRectangle((uint64_t) hexColor, (uint64_t) x, (uint64_t) y, (int) width, (int) height);
 }
-//works ok
- uint64_t scale_up(){
+
+uint64_t scale_up() {
     return scaleUp();
 }
-//works ok
- uint64_t scale_down(){
+
+uint64_t scale_down() {
     return scaleDown();
 }
-//works ok
- uint64_t make_sound(uint64_t freq, uint64_t duration , uint64_t wait){
+
+uint64_t make_sound(uint64_t freq, uint64_t duration , uint64_t wait) {
     playNoteSound((uint64_t) freq, (uint64_t) duration, (uint64_t) wait);
     return 1;
 }
-//works ok
- uint64_t get_height_pix(){
-    return (uint64_t)getHeightPixels();
+
+uint64_t get_height_pix() {
+    return (uint64_t) getHeightPixels();
 }
-//works ok
- uint64_t get_width_pix(){
-    return (uint64_t)getWidthPixels();
+
+uint64_t get_width_pix() {
+    return (uint64_t) getWidthPixels();
 }
-//works ok
- uint32_t get_pix(uint64_t x, uint64_t y){
+
+uint32_t get_pix(uint64_t x, uint64_t y) {
     return getPixelColor((uint64_t) x, (uint64_t) y);
 }
 
-//works ok
- uint64_t get_max_lines(){
+ uint64_t get_max_lines() {
     return getHeightChars();
 }
-//works ok
-uint64_t set_cursor_to_line(uint64_t line){
-    if(line >= get_max_lines()){
-        return 1;
-    }
-    setCursorLine( line );
-    return 0;
-}
-//works ok!
-uint64_t get_registers(uint64_t buffer ){
-    if(has_regs){
-        for(int i = 0; i<17 ; i++){
-            ((uint64_t * ) buffer)[i] = show_registers_dump[i];
-        }
-    }
-    return 0;
-}
-//works ok
-uint64_t wait(uint64_t millis){
-    int delta = millis * 18 /1000;
-    timer_wait( delta);
+
+uint64_t set_cursor_to_line(uint64_t line) {
+    if (line >= get_max_lines()) return 1;
+    setCursorLine(line);
     return 0;
 }
 
-uint64_t get_char(uint64_t fileDescriptor){
-    if (fileDescriptor != STDIN ) return 0;
+uint64_t get_registers(uint64_t buffer) {
+    if (has_regs) {
+        for (int i = 0; i<17 ; i++) {
+            ((uint64_t *) buffer)[i] = show_registers_dump[i];
+        }
+        return 0;   
+    }
+    return 1;
+}
+
+uint64_t wait(uint64_t millis) {
+    int delta = millis * 18 / 1000;
+    timer_wait(delta);
+    return 0;
+}
+
+uint64_t get_char(uint64_t fileDescriptor) {
+    if (fileDescriptor != STDIN) return 0;
     uint64_t c = getLastChar();
     return c;
 }
 
-void set_cursor(uint64_t posx, uint64_t line){
+void set_cursor(uint64_t posx, uint64_t line) {
     setCursor(posx, lineToHeight(line));
 }
 
 uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8) {
-    switch (rax){
+    switch (rax) {
         case 0:
             return read(rdi, rsi , rdx);
-            break;
         case 1:
             return write(rdi,rsi,rdx);
         case 2:
@@ -236,7 +216,6 @@ uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx 
             return get_pix(rdi,rsi);
         case 16:
             return get_max_lines();
-            break;
         case 17: 
             set_cursor_to_line(rdi);
             break;
@@ -254,5 +233,4 @@ uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx 
             return 1;
     }
     return 0;
-
 }

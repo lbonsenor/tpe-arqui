@@ -1,5 +1,6 @@
 #include <time.h>
 #include <videoDriver.h>
+#include <interrupts.h>
 #include <lib.h>
 
 extern uint64_t getMinutes();
@@ -14,11 +15,12 @@ void timerHandler() {
 int ticksElapsed() {
 	return ticks;
 }
-// probs will need it for snake
-int millisElapsed(){
+
+int millisElapsed() {
 	return ticks * (1000 / 18);
 }
-//rounding up slightly
+
+// Rounding up slightly
 int secondsElapsed() {
 	return ticks / 18;
 	

@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 
 	array_t fileArray = {arguments.args, arguments.count};
 
-	if(!checkFiles(fileArray)) {
+	if (!checkFiles(fileArray)) {
 		return 1;
 	}	
 
@@ -53,7 +53,7 @@ int buildImage(array_t fileArray, char *output_file) {
 
 	FILE *target;
 
-	if((target = fopen(output_file, "w")) == NULL) {
+	if ((target = fopen(output_file, "w")) == NULL) {
 		printf("Can't create target file\n");
 		return FALSE;
 	}
@@ -88,8 +88,8 @@ int buildImage(array_t fileArray, char *output_file) {
 int checkFiles(array_t fileArray) {
 
 	int i = 0;
-	for(; i < fileArray.length ; i++) {
-		if(access(fileArray.array[i], R_OK)) {
+	for (; i < fileArray.length ; i++) {
+		if (access(fileArray.array[i], R_OK)) {
 			printf("Can't open file: %s\n", fileArray.array[i]);
 			return FALSE;
 		}
