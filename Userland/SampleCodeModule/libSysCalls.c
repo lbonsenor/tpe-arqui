@@ -6,7 +6,12 @@ uint64_t readBuffer(char* buffer, uint64_t length){
     return syscall(0,0,(uint64_t )buffer,length,0,0); 
 }
 void print(char* buffer){
-    syscall(1,1,(uint64_t)buffer,1,0,0); 
+    syscall(1,1,(uint64_t)buffer,0,0,0); 
+}
+void putChar(char c){
+    char aux[2] = {c, 0};
+    syscall(1,1,aux,0,0,0);
+    
 }
 uint64_t getTime(){
     syscall(2,0,0,0,0,0);

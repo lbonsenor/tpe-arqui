@@ -49,14 +49,13 @@ void insertCommand(){
       while ((c = getChar()) != '\n' && bufferIndex < BUFFER_SIZE)
       {
             if (c != '\0'){
-                  char aux[2] = {c,'\0'};
                   if (c == '\b' && bufferIndex > 0) {
                         buffer[--bufferIndex] = '\0';
-                        print(aux);
+                        putChar(c);
                   }
                   else if (c != '\b') {
                         buffer[bufferIndex++] = c;
-                        print(aux);
+                        putChar(c);
                   }
             }
       }
