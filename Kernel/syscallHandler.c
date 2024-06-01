@@ -92,10 +92,10 @@ extern uint16_t getSeconds();
         hours = 23;
     }
     else if(hours == 1){
-        hours == 22;
+        hours = 22;
     }
     else if( hours == 0){
-        hours == 21;
+        hours = 21;
     }
     return (uint64_t )((hours*10000) +(getMinutes()*100) + (getSeconds()));
 }

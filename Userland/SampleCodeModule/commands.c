@@ -16,13 +16,18 @@ void help(){
 
 char * time(){
     uint64_t time = getTime();
-    char toReturn[TIME_LENGTH+1] = {0};
+    char toReturn[TIME_LENGTH] = {'\0'};
 
-    for (int i = TIME_LENGTH-1; i >= 0 ; i--)
+    print("Current time is: ");
+    for (int i = TIME_LENGTH-2; i >= 0 ; i--)
     {
-        toReturn[i] = time % 10 + '0';
-        time = time / 10;
+        if (i == 2 || i == 5) toReturn[i] = ':';
+        else {
+            toReturn[i] = (time % 10) + '0';
+            time = time / 10;
+        }
     }
+    print(toReturn);
     return toReturn;
 }
 

@@ -27,7 +27,7 @@ void executeCommand(char * str){
       switch (findCommand(str))
       {
       case 0: help(); break;
-      case 1: print(time()); break;
+      case 1: time(); break;
       case 2: eliminator(); break;
       case 4: regs(); break;
       case 5: clearScreen(); break;
