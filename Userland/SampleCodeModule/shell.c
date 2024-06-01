@@ -29,10 +29,10 @@ void executeCommand(char * str){
       case 0: help(); break;
       case 1: time(); break;
       case 2: eliminator(); break;
-      case 4: regs(); break;
-      case 5: clearScreen(); break;
-      case 6: scaleDown(); break;
-      case 7: scaleUp(); break;
+      case 3: regs(); break;
+      case 4: clearScreen(); break;
+      case 5: scaleDown(); break;
+      case 6: scaleUp(); break;
       
       default:
             break;

@@ -1,4 +1,4 @@
-GLOBAL sysCall
+GLOBAL syscall
 
 section .text
  
@@ -38,7 +38,7 @@ section .text
 	pop rax
 %endmacro
 
-sysCall:
+syscall:
 
 	; pushState
 	

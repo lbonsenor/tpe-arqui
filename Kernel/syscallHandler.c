@@ -179,7 +179,7 @@ uint64_t get_registers(uint64_t buffer ){
             ((uint64_t * ) buffer)[i] = show_registers_dump[i];
         }
     }
-    return 1;
+    return 0;
 }
 //works ok
 uint64_t wait(uint64_t millis){
