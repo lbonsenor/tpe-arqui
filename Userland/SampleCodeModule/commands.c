@@ -79,6 +79,7 @@ void regs() {
     for (int i = 0; i < 17; i++) {
         char str[8] = {0};
         print(registerNames[i]); print(": ");
+        if (i == 9 || i == 10) print(" ");
         print(itoa(buffer[i], str, 16));
         print("\n");
     }
