@@ -169,7 +169,6 @@ int putChar(char c, uint64_t x, uint64_t y) {
 	return 0;
 }
 
-
 // Puts a char in the current cursor position. Returns 0 if successful
 int putCharCursor(char c) {
 	if (c == '\n') {

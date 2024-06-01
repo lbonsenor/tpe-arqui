@@ -49,7 +49,6 @@ void exceptionDispatcher(int exception, uint64_t registers[17]) {
 	print("\n");
 	print(waiting);
 	timer_wait(18*2);
-	scaleDown();
 	clearScreen();
 	setCursorLine(0);
 	resetMain();

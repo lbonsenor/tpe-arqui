@@ -56,7 +56,7 @@ void insertCommand() {
                   }
             }
       }
-      print("\n\n");
+      print("\n");
       executeCommand(buffer);
       print("\n");
       insertCommand();

@@ -11,7 +11,6 @@ void help() {
     print("\n   clear: Clean the screen");
     print("\n   scaledown: Reduce the text size (min: 1, default: 1)");
     print("\n   scaleup: Increment the text size (max: 4, default: 1)");
-    print("\n");
 }
 
 void time() {
@@ -19,7 +18,6 @@ void time() {
     char toReturn[TIME_LENGTH] = {'\0'};
 
     print("Current time is: ");
-    print("\n");
     for (int i = TIME_LENGTH-2; i >= 0 ; i--) {
         if (i == 2 || i == 5) toReturn[i] = ':';
         else {
@@ -84,12 +82,12 @@ char* itoa(int num, char* str) {
 void regs() {
     uint64_t buffer[17];
     getRegisters(buffer);
-    char * registerNames[] = {"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"};
+    char * registerNames[] = {" RIP", " RAX", " RBX", " RCX", " RDX", " RSI", " RDI", " RBP", " RSP", " R8", " R9", " R10", " R11", " R12", " R13", " R14", " R15"};
     for (int i = 0; i < 17; i++) {
         char str[8] = {0};
         print(registerNames[i]); print(": ");
         print(itoa(buffer[i], str));
-        print("\n");
+        if (i != 16) print("\n");
     }
     return;
 }
