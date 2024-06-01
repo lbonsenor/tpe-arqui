@@ -6,15 +6,14 @@
 void help(){
     print("Welcome to kaOS Manual! Here's the list of commands available");
     print("\n   time: Displays the current time in the format ??");
-    print("\n   eliminator: Play Eliminator in Single-Player mode. Use WASD to move");
-    print("\n   eliminator2: Play Eliminator in Multi-Player mode. Use WASD to move Player 1 and IJKL to move Player 2");
+    print("\n   eliminator: Play Eliminator against yourself or a friend. Use WASD to move Player 1, IJKL to move Player 2");
     print("\n   regs: Display the current value of all registers");
     print("\n   clear: Clean the screen");
     print("\n   scaledown: Reduce the text size (min: 1, default: 1)");
     print("\n   scaleup: Increment the text size (max: 4, default: 1)");
 }
 
-char * time(){
+void time(){
     uint64_t time = getTime();
     char toReturn[TIME_LENGTH] = {'\0'};
 
@@ -28,7 +27,7 @@ char * time(){
         }
     }
     print(toReturn);
-    return toReturn;
+    return;
 }
 
 // Function to reverse a string
@@ -90,7 +89,7 @@ void regs(){
     print("Registers:\n");
     for (int i = 0; i < 17; i++)
     {
-        char * str[8];
+        char str[8] = {0};
         print(registerNames[i]); print(": ");
         print(itoa(buffer[i], str));
         print("\n");

@@ -11,6 +11,9 @@ void print(char* buffer){
 uint64_t getTime(){
     syscall(2,0,0,0,0,0);
 } 
+void clearLine(uint64_t line){
+    syscall(6,line,0,0,0,0);
+}
 void clearScreen(){
     syscall(7,0,0,0,0,0);
 }
@@ -36,10 +39,16 @@ uint64_t getMaxWidth(){
 uint64_t getPixelColor(uint64_t x, uint64_t y){
     return syscall(15,x,y,0,0,0);
 }
+void setCursorToLine(uint64_t line){
+    syscall(17, line, 0,0,0,0);
+}
 void getRegisters(uint64_t * buffer){
     syscall(18,(uint64_t)buffer,0,0,0,0);
 }
 char getChar(){
     char c = syscall(19,0,0,0,0,0);
     return c;
+}
+void setCursor(uint64_t posx, uint64_t line){
+    syscall(36, posx, line,0,0,0);
 }

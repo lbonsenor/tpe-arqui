@@ -113,7 +113,7 @@ char getLastChar(){
     lastIndexFlag = 0;
     return buffer[writeIndex-1];
   }
-  
+  return 0;
 }
 
 //used for debugging lol

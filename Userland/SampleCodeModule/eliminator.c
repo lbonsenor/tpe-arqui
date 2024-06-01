@@ -1,10 +1,12 @@
 #include <eliminator.h>
 #include "libSysCalls.h"
+#include "commands.h"
 #define UP 0
 #define LEFT 1
 #define DOWN 2
 #define RIGHT 3
 #define SPEED 10000
+#define MAX_POINTS 999999
 
 char p1Keys[4] = {'w', 'a', 's', 'd'};
 char p2Keys[4] = {'i','j', 'k', 'l'};
@@ -75,12 +77,12 @@ void move(){
 int didLoose(int players){
     int toReturn = 0;
     if (!(p1Coord[0] >= 0 && p1Coord[0] < width &&  
-          p1Coord[1] >= 0 && p1Coord[1] < height && 
+          p1Coord[1] >= 16 && p1Coord[1] < height && 
           getPixelColor(p1Coord[0], p1Coord[1]) == 0x000000))
         toReturn = 1;
     
     if (!(p2Coord[0] >= 0 && p2Coord[0] < width
-    &&  p2Coord[1] >= 0 && p2Coord[1] < height
+    &&  p2Coord[1] >= 16 && p2Coord[1] < height
     &&  getPixelColor(p2Coord[0], p2Coord[1]) == 0x000000) && players == 2)
         toReturn = (toReturn == 1) ? 3 : 2;
     
@@ -88,7 +90,7 @@ int didLoose(int players){
     
 }
 
-void loose(int whoLost){
+void loose(int whoLost, int pts){
     clearScreen();
     switch (whoLost)
     {                
@@ -99,6 +101,9 @@ void loose(int whoLost){
             break;
     }
     print("                  Y               N");
+    print("\n\nPTS: ");
+    char aux[7] = {0};
+    print(itoa(pts, aux));
 
     char c = 0;
     char currentDecision = 1;
@@ -125,16 +130,26 @@ void loose(int whoLost){
     else clearScreen();
 }
 
+void printPts(int pts){
+    setCursor(4, 0);
+    print("PTS: ");
+    char s[50] = {0};
+    print(itoa(pts, s));
+}
+
 void play1(){
     int counter = 0; // This counter is going to serve as a form of time checking for in-game velocity, it is unnecesary to make a syscall
     int lost = 0;
+    int pts = 0;
     clearScreen();
     
     width = getMaxWidth();
-    height = getMaxHeight()-16;
+    height = getMaxHeight();
+
+    drawRectangle(0x328fa8, 0, 16, width, 1);
 
     p1Coord[0] = width/2;
-    p1Coord[1] = 0;
+    p1Coord[1] = 16;
 
     p1Dir = DOWN;
     p2Dir = UP;
@@ -152,25 +167,32 @@ void play1(){
             drawRectangle(p1Color, p1Coord[0], p1Coord[1], 1, 1);
         }
         counter++;
-        if (counter >= SPEED) counter = 0;
+        if (counter >= SPEED) {
+            counter = 0;
+            printPts(pts);
+            if (pts < MAX_POINTS) pts++;
+        }
         
     }
-    loose(lost);
+    loose(lost, pts);
 
 }
 void play2(){
     int counter = 0; // This counter is going to serve as a form of time checking for in-game velocity, it is unnecesary to make a syscall
     int lost = 0;    // 1 if Player 1 Lost, 2 if Player 2 Lost, 3 if tie
+    int pts = 0;
     clearScreen();
 
     width = getMaxWidth();
-    height = getMaxHeight()-16;
+    height = getMaxHeight();
+
+    drawRectangle(0x328fa8, 0, 16, width, 1);
 
     p1Dir = DOWN;
     p2Dir = UP;
 
     p1Coord[0] = width/2;
-    p1Coord[1] = 0;
+    p1Coord[1] = 16;
     p2Coord[0] = width/2;
     p2Coord[1] = height-1;
 
@@ -188,10 +210,14 @@ void play2(){
             drawRectangle(p2Color, p2Coord[0], p2Coord[1], 1, 1);
         }
         counter++;
-        if (counter >= SPEED) counter = 0;
+        if (counter >= SPEED){
+            counter = 0;
+            printPts(pts);
+            if (pts < MAX_POINTS) pts++;
+        }
         
     }
-    loose(lost);
+    loose(lost, pts);
 }
 
 void eliminator(){

@@ -24,6 +24,7 @@ void newLine();
 void clearScreen();
 
 int setCursorLine(unsigned int line);
+void setCursor(uint16_t x, uint16_t y);
 
 void setColor(uint32_t newColor);
 

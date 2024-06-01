@@ -17,6 +17,7 @@
         "sound.h": "c",
         "cstdint": "cpp",
         "format": "cpp",
-        "libsyscalls.h": "c"
+        "libsyscalls.h": "c",
+        "commands.h": "c"
     }
 }

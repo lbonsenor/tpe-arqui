@@ -1,3 +1,4 @@
+#include "shell.h"
 #include "libSysCalls.h"
 #include "commands.h"
 #include "eliminator.h"

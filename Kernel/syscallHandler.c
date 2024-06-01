@@ -83,7 +83,6 @@ extern uint16_t getSeconds();
 
  uint64_t get_current_time(){
     uint16_t hours = getHours();
-    char buffer[10];
     
     if(hours >= 3){
         hours -= 3;
@@ -194,6 +193,10 @@ uint64_t get_char(uint64_t fileDescriptor){
     return c;
 }
 
+void set_cursor(uint64_t posx, uint64_t line){
+    setCursor(posx, lineToHeight(line));
+}
+
 uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8) {
     switch (rax){
         case 0:
@@ -243,6 +246,9 @@ uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx 
             return get_char(rdi);
         case 35:
             wait(rdi);
+            break;
+        case 36:
+            set_cursor(rdi, rsi);
             break;
         default:
             return 1;
