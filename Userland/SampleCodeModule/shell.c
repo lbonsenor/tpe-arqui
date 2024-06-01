@@ -40,12 +40,11 @@ void executeCommand(char * str) {
 }
 
 void insertCommand() {
-      print("kaOS > ");
+      print("caOS>");
       char buffer[BUFFER_SIZE] = {'\0'};
       int bufferIndex = 0;
       char c = 0;
-      while ((c = getChar()) != '\n' && bufferIndex < BUFFER_SIZE)
-      {
+      while ((c = getChar()) != '\n' && bufferIndex < BUFFER_SIZE) {
             if (c != '\0') {
                   if (c == '\b' && bufferIndex > 0) {
                         buffer[--bufferIndex] = '\0';
@@ -64,6 +63,6 @@ void insertCommand() {
 }
 
 void shell() {
-      print("Welcome to kaOS! Please input your command\n");
+      print("Welcome to caOS! Please input your command\n");
       insertCommand();
 }

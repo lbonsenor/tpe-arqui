@@ -4,13 +4,14 @@
 #define TIME_LENGTH 9
 
 void help() {
-    print("Welcome to kaOS Manual! Here's the list of commands available");
-    print("\n   time: Displays the current time in the format ??");
+    print("Welcome to caOS Manual! Here's the list of commands available:");
+    print("\n   time: Displays the current time");
     print("\n   eliminator: Play Eliminator against yourself or a friend. Use WASD to move Player 1, IJKL to move Player 2");
     print("\n   regs: Display the current value of all registers");
     print("\n   clear: Clean the screen");
     print("\n   scaledown: Reduce the text size (min: 1, default: 1)");
     print("\n   scaleup: Increment the text size (max: 4, default: 1)");
+    print("\n");
 }
 
 void time() {
@@ -83,7 +84,6 @@ void regs() {
     uint64_t buffer[17];
     getRegisters(buffer);
     char * registerNames[] = {"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"};
-    print("Registers:\n");
     for (int i = 0; i < 17; i++) {
         char str[8] = {0};
         print(registerNames[i]); print(": ");

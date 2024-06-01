@@ -15,11 +15,12 @@ void timerHandler() {
 int ticksElapsed() {
 	return ticks;
 }
-// probs will need it for snake
+
 int millisElapsed() {
 	return ticks * (1000 / 18);
 }
-//rounding up slightly
+
+// Rounding up slightly
 int secondsElapsed() {
 	return ticks / 18;
 	
