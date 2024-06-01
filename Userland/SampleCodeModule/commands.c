@@ -79,7 +79,8 @@ void regs() {
         print("Press ctrl key to save registers\n");
         return;
     }
-    char * registerNames[] = {" RIP", " RAX", " RBX", " RCX", " RDX", " RSI", " RDI", " RBP", " RSP", " R8", " R9", " R10", " R11", " R12", " R13", " R14", " R15"};
+    char * registerNames[] = {" RAX", " RBX", " RCX", " RDX", " RSI", " RDI", " RBP", " RSP", "  R8", "  R9", " R10", " R11", " R12",
+        " R13", " R14", " R15", " RIP"};
     for (int i = 0; i < 17; i++) {
         char str[8] = {0};
         print(registerNames[i]); print(": ");
