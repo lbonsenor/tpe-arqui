@@ -19,6 +19,7 @@ void time() {
     char toReturn[TIME_LENGTH] = {'\0'};
 
     print("Current time is: ");
+    print("\n");
     for (int i = TIME_LENGTH-2; i >= 0 ; i--) {
         if (i == 2 || i == 5) toReturn[i] = ':';
         else {
