@@ -91,6 +91,7 @@ int didLoose(int players){
 }
 
 void loose(int whoLost, int pts){
+    make_sound(50, 4, 0);
     clearScreen();
     switch (whoLost)
     {                
@@ -225,6 +226,7 @@ void eliminator(){
     print("\nPlease select the amount of players and press ENTER\n            (change decision with a or d)\n\n");
     print("                  1               2");
 
+    make_sound(200, 1, 0);
     char c = 0;
     char currentDecision = 1;
     while (c != '\n')
