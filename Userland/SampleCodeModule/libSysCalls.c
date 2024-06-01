@@ -10,11 +10,11 @@ void print(char* buffer){
 }
 void putChar(char c){
     char aux[2] = {c, 0};
-    syscall(1,1,aux,0,0,0);
+    syscall(1,1,(uint64_t)aux,0,0,0);
     
 }
 uint64_t getTime(){
-    syscall(2,0,0,0,0,0);
+    return syscall(2,0,0,0,0,0);
 } 
 void clearLine(uint64_t line){
     syscall(6,line,0,0,0,0);
