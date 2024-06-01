@@ -9,6 +9,15 @@
         "lib.h": "c",
         "interrupts.h": "c",
         "stdint.h": "c",
-        "syscallhandler.h": "c"
+        "syscallhandler.h": "c",
+        "time.h": "c",
+        "exceptions.h": "c",
+        "videodriver.h": "c",
+        "string.h": "c",
+        "sound.h": "c",
+        "cstdint": "cpp",
+        "format": "cpp",
+        "libsyscalls.h": "c",
+        "commands.h": "c"
     }
 }

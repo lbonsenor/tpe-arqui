@@ -11,7 +11,7 @@
 #include <syscallHandler.h>
 
 #define STDIN 0
-#define STDOUT 0
+#define STDOUT 1
 #define STDERR 2
 #define KBDIN 3
 
@@ -54,21 +54,24 @@ extern uint16_t getSeconds();
 
 
  uint64_t read(uint64_t fileDescriptor , uint64_t buffer , uint64_t length){
-    //then turn this into
     if (fileDescriptor != STDIN ){
         return 0;
     }
     char * bufferPosition = (char *) buffer;
     int i =0;
     char readCharacter;
-    while (i< length && (readCharacter= getFromBuffer()) != 0 ){
-            bufferPosition[i] = readCharacter;
-            i++;
+    cleanRead();
+
+    while (i < length && (readCharacter = getFromBuffer()) != '\0' ){
+        bufferPosition[i] = readCharacter;
+        i++;
     }
+    bufferPosition[i] = '\0';
     return i;
-} 
+}
 // i s
  uint64_t write(uint64_t fileDescriptor, uint64_t buffer , uint64_t length){
+    
     if(fileDescriptor != STDOUT){
         return 1;
     }
@@ -80,7 +83,6 @@ extern uint16_t getSeconds();
 
  uint64_t get_current_time(){
     uint16_t hours = getHours();
-    char buffer[10];
     
     if(hours >= 3){
         hours -= 3;
@@ -89,10 +91,10 @@ extern uint16_t getSeconds();
         hours = 23;
     }
     else if(hours == 1){
-        hours == 22;
+        hours = 22;
     }
     else if( hours == 0){
-        hours == 21;
+        hours = 21;
     }
     return (uint64_t )((hours*10000) +(getMinutes()*100) + (getSeconds()));
 }
@@ -176,7 +178,7 @@ uint64_t get_registers(uint64_t buffer ){
             ((uint64_t * ) buffer)[i] = show_registers_dump[i];
         }
     }
-    return 1;
+    return 0;
 }
 //works ok
 uint64_t wait(uint64_t millis){
@@ -185,10 +187,21 @@ uint64_t wait(uint64_t millis){
     return 0;
 }
 
-uint64_t syscallHandler(uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8 , uint64_t rax) {
+uint64_t get_char(uint64_t fileDescriptor){
+    if (fileDescriptor != STDIN ) return 0;
+    uint64_t c = getLastChar();
+    return c;
+}
+
+void set_cursor(uint64_t posx, uint64_t line){
+    setCursor(posx, lineToHeight(line));
+}
+
+uint64_t syscallHandler(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8) {
     switch (rax){
         case 0:
             return read(rdi, rsi , rdx);
+            break;
         case 1:
             return write(rdi,rsi,rdx);
         case 2:
@@ -229,8 +242,13 @@ uint64_t syscallHandler(uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10
             break;
         case 18:
             return get_registers(rdi);
+        case 19:
+            return get_char(rdi);
         case 35:
             wait(rdi);
+            break;
+        case 36:
+            set_cursor(rdi, rsi);
             break;
         default:
             return 1;
