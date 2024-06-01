@@ -11,6 +11,8 @@ void help() {
     print("\n   clear: Clean the screen");
     print("\n   scaledown: Reduce the text size (min: 1, default: 1)");
     print("\n   scaleup: Increment the text size (max: 4, default: 1)");
+    print("\n   divzero: Divide by 0 to check the exception");
+    print("\n   invalidopcode: Make an invalid opcode to check the exception");
     print("\n");
 }
 
