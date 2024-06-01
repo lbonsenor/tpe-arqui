@@ -4,7 +4,7 @@
 #include <time.h>
 #include <sound.h>
 
-extern void outb(uint16_t param1, uint32_t param2);
+extern void outb(uint32_t param1, uint32_t param2);
 extern uint8_t inb(uint16_t param1);
 
 // Play sound using built in speaker

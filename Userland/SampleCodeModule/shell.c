@@ -20,7 +20,6 @@ int isCommand(char * str, int command) {
 int findCommand(char * str) {
       for (int i = 0; i < COMMANDS_SIZE; i++)
             if (isCommand(str, i)) return i;
-            
       return -1;
 }
 
@@ -31,8 +30,14 @@ void executeCommand(char * str) {
       case 2: eliminator(); break;
       case 3: regs(); break;
       case 4: clearScreen(); break;
-      case 5: scaleDown(); break;
-      case 6: scaleUp(); break;
+      case 5: 
+            scaleDown();
+            clearScreen(); 
+            break;
+      case 6: 
+            scaleUp(); 
+            clearScreen();
+            break;
       case 7: divzero(); break;
       default: invalidOpCode();
             break;
@@ -58,7 +63,6 @@ void insertCommand() {
       }
       print("\n");
       executeCommand(buffer);
-      print("\n");
       insertCommand();
 }
 

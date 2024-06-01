@@ -100,7 +100,7 @@ void lose(int whoLost, int pts) {
     print("                  Y               N");
     print("\n\nPTS: ");
     char aux[7] = {0};
-    print(itoa(pts, aux));
+    print(itoa(pts, aux, 10));
 
     char c = 0;
     char currentDecision = 1;
@@ -130,7 +130,7 @@ void printPts(int pts) {
     setCursor(4, 0);
     print("PTS: ");
     char s[50] = {0};
-    print(itoa(pts, s));
+    print(itoa(pts, s, 10));
 }
 
 void play1() {

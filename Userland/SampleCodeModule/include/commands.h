@@ -6,4 +6,4 @@ void time();
 
 void regs();
 
-char* itoa(int num, char* str);
+char* itoa(int num, char* str, int base);
