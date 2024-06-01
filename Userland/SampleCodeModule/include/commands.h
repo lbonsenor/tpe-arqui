@@ -1,4 +1,4 @@
 #include "libSysCalls.h"
 void help();
-void time();
+char * time();
 void regs();

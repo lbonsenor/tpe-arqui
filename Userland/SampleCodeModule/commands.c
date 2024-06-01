@@ -1,7 +1,7 @@
 #include <commands.h>
 #include <eliminator.h>
 
-static char* commands[] = {"help", "time", "eliminator", "eliminator2", "regs", "clear", "scaledown", "scaleup"};
+#define TIME_LENGTH 9
 
 void help(){
     print("Welcome to kaOS Manual! Here's the list of commands available");
@@ -14,8 +14,16 @@ void help(){
     print("\n   scaleup: Increment the text size (max: 4, default: 1)");
 }
 
-void time(){
+char * time(){
+    uint64_t time = getTime();
+    char toReturn[TIME_LENGTH+1] = {0};
 
+    for (int i = TIME_LENGTH-1; i >= 0 ; i--)
+    {
+        toReturn[i] = time % 10 + '0';
+        time = time / 10;
+    }
+    return toReturn;
 }
 
 

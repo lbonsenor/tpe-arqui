@@ -26,8 +26,8 @@ void drawRectangle(uint64_t color, uint64_t posX, uint64_t posY, uint64_t width,
     sysCall(9,color,posX,posY,width,height);
 }
 
-void showTime(){
-    // readBuffer(sysCall(2,0,0,0,0,0)); no me funciona esto
+uint64_t getTime(){
+    sysCall(2,0,0,0,0,0);
 } 
 
 void scaleUp(){
