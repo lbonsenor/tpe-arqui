@@ -1,5 +1,6 @@
 GLOBAL syscall
-
+GLOBAL divzero
+GLOBAL invalidOpCode
 section .text
  
  %macro pushState 0
@@ -37,6 +38,16 @@ section .text
 	pop rbx
 	pop rax
 %endmacro
+
+divzero:
+	mov rax, 5
+	mov ebx, 0
+	div ebx
+	ret
+
+invalidOpCode:
+    mov cr6, rax
+    ret
 
 syscall:
 

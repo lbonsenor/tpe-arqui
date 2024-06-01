@@ -3,9 +3,9 @@
 #include "commands.h"
 #include "eliminator.h"
 #define BUFFER_SIZE 1024
-#define COMMANDS_SIZE 7
+#define COMMANDS_SIZE 8
 
-static char* commands[] = {"help", "time", "eliminator", "regs", "clear", "scaledown", "scaleup"};
+static char* commands[] = {"help", "time", "eliminator", "regs", "clear", "scaledown", "scaleup", "divzero"};
 
 int isCommand(char * str, int command){
       if (command >= COMMANDS_SIZE) return -1;
@@ -34,8 +34,9 @@ void executeCommand(char * str){
       case 4: clearScreen(); break;
       case 5: scaleDown(); break;
       case 6: scaleUp(); break;
+      case 7: divzero(); break;
       
-      default:
+      default: invalidOpCode();
             break;
       }
 }

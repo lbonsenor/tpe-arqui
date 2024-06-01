@@ -21,7 +21,7 @@ void exceptionDispatcher(int exception, uint64_t registers[17]) {
 	//rdi, rsi params
 	wait(18*3);
 	clearScreen();
-	scaleUp();
+	// scaleUp();
 	print(errorMessage);
 	//print("\n");
 	char buffer[10];
