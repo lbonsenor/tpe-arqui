@@ -102,14 +102,6 @@ void playMelody() {
 	playNoteSound(MI,10,0);
 	playNoteSound(RE,10,0);
 }
-#define DO2 523
-#define RE2 587
-#define MI2 659
-#define FA2 698
-#define SOL2 784
-#define LA2 880
-#define SI2 987
-#define DO3 1046
 
 void playBetterCallSaul(){
 	playNoteSound(MI,22,1);

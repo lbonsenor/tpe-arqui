@@ -52,9 +52,9 @@ int main() {
 	scale_up();
 	print("   Matias Leporini, Lautaro Bonsenor, Ana Negre, Fernando Li\n");
 	setCursorLine(10);
-	print("                        Welcome to caOS!\n");
-	print("             Arquitectura de Computadoras. 1Q2024\n");
-	print("                               TPE\n");
+	print("                       Welcome to caOS!\n");
+	// print("             Arquitectura de Computadoras. 1Q2024\n");
+	// print("                               TPE\n");
 	playBetterCallSaul();
 	setCursorLine(23);
 	print("Starting...");
