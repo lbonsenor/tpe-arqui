@@ -207,7 +207,6 @@ haltcpu:
 	hlt
 	ret
 
-
 SECTION .bss
     has_regs resb 1; to check whether we have saved or not!
     show_registers resq 17 ; reserve a qword for each register 

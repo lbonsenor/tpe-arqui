@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-extern uint64_t syscall(uint64_t rax, uint64_t rdi, uint64_t rsi , uint64_t rdx , uint64_t r10, uint64_t r8);
+extern uint64_t syscall(uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8);
 
 uint64_t readBuffer(char* buffer, uint64_t length) {
     return syscall(0, 0, (uint64_t) buffer, length, 0, 0); 
