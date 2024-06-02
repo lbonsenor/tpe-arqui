@@ -7,12 +7,12 @@ void help() {
     print("Welcome to caOS Manual! Here's the list of commands available:");
     print("\n   time: Displays the current time");
     print("\n   eliminator: Play Eliminator against yourself or a friend. Use WASD to move Player 1, IJKL to move Player 2");
-    print("\n   regs: Display the current value of all registers");
+    print("\n   regs: Display the last saved value of registers, press CTRL to save");
     print("\n   clear: Clean the screen");
     print("\n   scaledown: Reduce the text size (min: 1, default: 1)");
     print("\n   scaleup: Increment the text size (max: 4, default: 1)");
-    print("\n   divzero: Divide by 0 to check the exception");
-    print("\n   invalidopcode: Make an invalid opcode to check the exception");
+    print("\n   divzero: Divide by 0 to trigger a zero division exception");
+    print("\n   invalidopcode: Make an invalid opcode to trigger an invalid opcode exception");
     print("\n");
 }
 
@@ -82,12 +82,12 @@ void regs() {
         print("Press ctrl key to save registers\n");
         return;
     }
-    char * registerNames[] = {" RAX", " RBX", " RCX", " RDX", " RSI", " RDI", " RBP", " RSP", "  R8", "  R9", " R10", " R11", " R12",
+    char * registerNames[] = {" RAX", " RBX", " RCX", " RDX", " RSI", " RDI", " RBP", " RSP", " R8", " R9", " R10", " R11", " R12",
         " R13", " R14", " R15", " RIP"};
     for (int i = 0; i < 17; i++) {
         char str[8] = {0};
         print(registerNames[i]); print(": ");
-        if (i == 9 || i == 10) print(" ");
+        if (i == 8 || i == 9) print(" ");
         print(itoa(buffer[i], str, 16));
         print("h");
         print("\n");

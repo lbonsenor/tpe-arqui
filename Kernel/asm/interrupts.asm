@@ -147,7 +147,8 @@ _irq01Handler:
     in al, 0x60 ; readKey
     cmp al, 0x1D ; check if left CTRL is pressed (used to save registers)
     jne .continue
-            mov [show_registers_dump + (1*8)], rbx 
+        ;mov [show_registers_dump],         rax -> dont do this, it only gets iD from ctrl key
+        mov [show_registers_dump + (1*8)], rbx 
         mov [show_registers_dump + (2*8)], rcx
         mov [show_registers_dump + (3*8)], rdx 
         mov [show_registers_dump + (4*8)], rsi 
@@ -169,7 +170,6 @@ _irq01Handler:
         mov [show_registers_dump + (16*8)], rax
         mov rax , [rsp + 14*8]
         mov [show_registers_dump], rax
-
         mov byte[has_regs], 1
 
 .continue:
