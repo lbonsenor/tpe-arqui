@@ -43,7 +43,7 @@ void playNoteSound(int freq, int duration, int wait) {
     timer_wait(duration);
     nosound();
     timer_wait(wait);
- }
+}
 
 void playMelody() {
 	playNoteSound(DO,10,0);
@@ -101,4 +101,27 @@ void playMelody() {
 	playNoteSound(MI,10,0);
 	playNoteSound(MI,10,0);
 	playNoteSound(RE,10,0);
+}
+#define DO2 523
+#define RE2 587
+#define MI2 659
+#define FA2 698
+#define SOL2 784
+#define LA2 880
+#define SI2 987
+#define DO3 1046
+
+void playBetterCallSaul(){
+	playNoteSound(MI,22,1);
+	playNoteSound(RE,5,0);
+	playNoteSound(MI,5,0);
+	playNoteSound(DO2,5,0);
+	playNoteSound(SOL,4,0);
+	playNoteSound(MI,4,0);
+	playNoteSound(DO2,22,1);
+	playNoteSound(MI2,5,0);
+	playNoteSound(RE2,5,0);
+	playNoteSound(DO2,5,1);
+	playNoteSound(LA,20,1);
+
 }

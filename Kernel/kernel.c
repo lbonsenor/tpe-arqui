@@ -49,6 +49,18 @@ void * initializeKernelBinary() {
 
 int main() {
 	load_IDT();
+	scale_up();
+	print("   Matias Leporini, Lautaro Bonsenor, Ana Negre, Fernando Li\n");
+	setCursorLine(10);
+	print("                        Welcome to caOS!\n");
+	print("             Arquitectura de Computadoras. 1Q2024\n");
+	print("                               TPE\n");
+	playBetterCallSaul();
+	setCursorLine(23);
+	print("Starting...");
+	wait(2000);
+	scale_down();
+	clear_screen();
 	((EntryPoint)sampleCodeModuleAddress)();
 	return 0;
 }
