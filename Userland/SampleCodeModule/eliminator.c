@@ -1,6 +1,7 @@
-#include <eliminator.h>
+#include "eliminator.h"
 #include "libSysCalls.h"
 #include "commands.h"
+#include "music.h"
 #define UP 0
 #define LEFT 1
 #define DOWN 2
@@ -239,59 +240,4 @@ void eliminator() {
         }
     }
     currentDecision == 1 ? play1() : play2();
-}
-
-void playDragonMelody(){
-
-   
-    make_sound(391,10,0); //5
-    make_sound(391,10,1);
-
-    make_sound(329,10,0); //3
-    make_sound(349,7,0);  //4
-    make_sound(391,7,0);  
-    make_sound(440,7,1);  //6 
-
-    make_sound(391,10,0); 
-    make_sound(349,10,0);
-    make_sound(329,10,0);
-    make_sound(293,10,2); //2
-
-    make_sound(329,10,0);
-    make_sound(329,10,1);
-
-    make_sound(261,10,0); //1
-    make_sound(293,7,0);
-    make_sound(329,7,0);
-    make_sound(349,7,0);
-
-    make_sound(329,10,0);
-    make_sound(293,7,0);
-    make_sound(261,7,0);
-    make_sound(246,7,3); //7 
-
-    make_sound(246,7,3);
-    make_sound(246,7,3);
-    make_sound(246,7,3);
-    make_sound(246,7,3);
-
-//world smoothest transition
-    make_sound(659,5,1);
-    make_sound(659,5,1);
-    make_sound(659,5,1);
-    make_sound(523,5,1);
-    make_sound(659,5,1);
-    make_sound(783,5,2);
-
-}
-
-void playWahWahWah(){
-    make_sound(195,10,2);
-    make_sound(184,10,2);
-    make_sound(174,10,2);
-    make_sound(146,6,0);
-    make_sound(138,6,0);
-    make_sound(146,6,0);
-    make_sound(138,6,0);
-    make_sound(146,6,0);
 }
