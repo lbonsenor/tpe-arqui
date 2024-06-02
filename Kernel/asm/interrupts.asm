@@ -99,6 +99,8 @@ SECTION .text
     mov [show_registers + (14*8)], r13
     mov [show_registers + (15*8)], r14
     mov [show_registers + (16*8)], r15
+    mov rax, [rsp+16] ; RFLAGS (in stack bc interruption happened).
+    mov [show_registers + (17*8)], rax    ; rflags
 
     ; Load parameters to pass to exceptions handler
     mov rdi, %1 
@@ -147,7 +149,7 @@ _irq01Handler:
     in al, 0x60 ; readKey
     cmp al, 0x1D ; check if left CTRL is pressed (used to save registers)
     jne .continue
-        ;mov [show_registers_dump],         rax -> dont do this, it only gets iD from ctrl key
+        ;mov [show_registers_dump],         rax -> dont do this, it only gets 1D from ctrl key
         mov [show_registers_dump + (1*8)], rbx 
         mov [show_registers_dump + (2*8)], rcx
         mov [show_registers_dump + (3*8)], rdx 
@@ -192,14 +194,35 @@ _exception6Handler:
 	exceptionHandler 6
 
 _int80Handler:
-	; syscalls params:	RDI	RSI	RDX	R10	R8	R9
-	; syscallHandler:	RDI RSI RDX R10 R8  RAX
-	; params in C are:	RDI RSI RDX RCX R8  R9
-    ; pushState
-    ; mov rcx, r10
-	; mov r9, rax -> we will be calling all params from c so its the same
+  	push rbx
+	push rcx
+	push rdx
+	push rbp
+	push rdi
+	push rsi
+	push r8
+	push r9
+	push r10
+	push r11
+	push r12
+	push r13
+	push r14
+	push r15
     call syscallHandler
-    ; popState
+	pop r15
+	pop r14
+	pop r13
+	pop r12
+	pop r11
+	pop r10
+	pop r9
+	pop r8
+	pop rsi
+	pop rdi
+	pop rbp
+	pop rdx
+	pop rcx
+	pop rbx
 	iretq
 
 haltcpu:
@@ -209,5 +232,5 @@ haltcpu:
 
 SECTION .bss
     has_regs resb 1; to check whether we have saved or not!
-    show_registers resq 17 ; reserve a qword for each register 
+    show_registers resq 18 ; reserve a qword for each register 
     show_registers_dump resq 17 ;aditionally for dumping (isnt passed as a param but is accessed directly)
