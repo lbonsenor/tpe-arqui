@@ -32,5 +32,6 @@ void playNoteSound(int freq, int duration, int waitAfter);
 
 void playMelody();
 void nosound();
+void playBetterCallSaul();
 
 #endif /* SOUND_H */

@@ -8,6 +8,7 @@
 #include <sound.h>
 #include <time.h>
 #include <syscallHandler.h>
+#include <betterCallcaOS.h>
 
 extern void printtest();
 
@@ -51,10 +52,11 @@ int main() {
 	load_IDT();
 	scale_up();
 	print("   Matias Leporini, Lautaro Bonsenor, Ana Negre, Fernando Li\n");
-	setCursorLine(10);
-	print("                       Welcome to caOS!\n");
+	setCursorLine(8);
+	print("                        Welcome to caOS!\n");
 	// print("             Arquitectura de Computadoras. 1Q2024\n");
 	// print("                               TPE\n");
+	putSaul(450,300,125,125);
 	playBetterCallSaul();
 	setCursorLine(23);
 	print("Starting...");
