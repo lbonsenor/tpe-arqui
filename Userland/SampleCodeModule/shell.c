@@ -2,6 +2,7 @@
 #include "libSysCalls.h"
 #include "commands.h"
 #include "eliminator.h"
+#include "music.h"
 #define BUFFER_SIZE 1024
 #define COMMANDS_SIZE 9
 
@@ -41,8 +42,9 @@ void executeCommand(char * str) {
       case 7: divzero(); break;
       case 8: invalidOpCode(); break;
       
-      default: print("Unrecognized command");
-            break;
+      default: print("Unrecognized command\n");
+               errorSound();
+               break;
       }
 }
 
@@ -72,3 +74,4 @@ void shell() {
       print("Welcome to caOS! Please input your command\n");
       insertCommand();
 }
+
