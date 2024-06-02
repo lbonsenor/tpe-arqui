@@ -60,7 +60,7 @@ int main() {
 	putSaul(450,300,125,125);
 	playBetterCallSaul();
 	setCursorLine(23);
-	print("Starting...");
+	print(" Starting...");
 	wait(1000);
 	scale_down();
 	clear_screen();
