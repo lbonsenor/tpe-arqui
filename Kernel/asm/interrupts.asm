@@ -99,6 +99,8 @@ SECTION .text
     mov [show_registers + (14*8)], r13
     mov [show_registers + (15*8)], r14
     mov [show_registers + (16*8)], r15
+    mov rax, [rsp+16] ; RFLAGS (in stack bc interruption happened).
+    mov [show_registers + (17*8)], rax    ; rflags
 
     ; Load parameters to pass to exceptions handler
     mov rdi, %1 
@@ -210,5 +212,5 @@ haltcpu:
 
 SECTION .bss
     has_regs resb 1; to check whether we have saved or not!
-    show_registers resq 17 ; reserve a qword for each register 
+    show_registers resq 18 ; reserve a qword for each register 
     show_registers_dump resq 17 ;aditionally for dumping (isnt passed as a param but is accessed directly)
