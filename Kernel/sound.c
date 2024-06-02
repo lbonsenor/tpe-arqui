@@ -105,7 +105,7 @@ void playMelody() {
 	playNoteSound(RE,10,0);
 }
 
-void playBetterCallSaul(){
+void playBetterCallSaul() {
 	playNoteSound(MI,22,1);
 	playNoteSound(RE,5,0);
 	playNoteSound(MI,5,0);

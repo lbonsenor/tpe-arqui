@@ -98,7 +98,7 @@ void clear_line(uint64_t line) {
     int startY = lineToHeight(line); 
     for (int i = 0; i< getWidthPixels(); i++) {
         int heightCounter=0;
-        while(heightCounter < CHAR_HEIGHT * getScale()) {
+        while (heightCounter < CHAR_HEIGHT * getScale()) {
             putPixel(0x000000, i , heightCounter+startY);
             heightCounter++;
         }
