@@ -43,6 +43,7 @@ void executeCommand(char * str) {
       case 8: invalidOpCode(); break;
       
       default: print("Unrecognized command\n");
+               errorSound();
             break;
       }
 }
