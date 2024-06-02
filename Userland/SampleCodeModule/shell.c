@@ -73,6 +73,7 @@ void insertCommand() {
 void shell() {
       print("Welcome to caOS shell! Please input your command\n");
       print("Choose from the following:");
+      print("\n* help: lists the available commands");
       print("\n* time: Displays the current time");
       print("\n* eliminator: Play Eliminator against yourself or a friend. Use WASD to move Player 1, IJKL to move Player 2");
       print("\n* regs: Display the last saved value of registers, press CTRL to save");
