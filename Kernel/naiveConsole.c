@@ -20,7 +20,7 @@ void ncPrintChar(char character) {
 
 void ncNewline() {
 	do { ncPrintChar(' '); }
-	while((uint64_t)(currentVideo - video) % (width * 2) != 0);
+	while ((uint64_t)(currentVideo - video) % (width * 2) != 0);
 }
 
 void ncPrintDec(uint64_t value) {

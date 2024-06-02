@@ -106,7 +106,7 @@ void lose(int whoLost, int pts) {
     char c = 0;
     char currentDecision = 1;
     while (c != '\n') {
-        c=getChar();
+        c = getChar();
         switch (c)
         {
         case 'a':
@@ -185,19 +185,17 @@ void play2() {
     p1Dir = DOWN;
     p2Dir = UP;
 
-    p1Coord[0] = width/2;
+    p1Coord[0] = width / 2;
     p1Coord[1] = 16;
-    p2Coord[0] = width/2;
-    p2Coord[1] = height-1;
+    p2Coord[0] = width / 2;
+    p2Coord[1] = height - 1;
 
     char c;
-    while (lost == 0)
-    {
+    while (lost == 0) {
         c = getChar();
         changeDir(c);
 
-        if (counter == 0)
-        {
+        if (counter == 0) {
             move();
             lost = didLose(2);
             drawRectangle(p1Color, p1Coord[0], p1Coord[1], 1, 1);
@@ -218,7 +216,6 @@ void eliminator() {
     clearScreen();
     print("\nPlease select the amount of players and press ENTER\n            (change decision with a or d)\n\n");
     print("                  1               2");
-
     playDragonMelody();
     char c = 0;
     char currentDecision = 1;
