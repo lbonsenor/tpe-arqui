@@ -50,8 +50,9 @@ void * initializeKernelBinary() {
 
 int main() {
 	load_IDT();
+	for (int i = 0; i < 4; i++) scale_down();
 	scale_up();
-	print("   Matias Leporini, Lautaro Bonsenor, Ana Negre, Fernando Li\n");
+	// print("   Matias Leporini, Lautaro Bonsenor, Ana Negre, Fernando Li\n");
 	setCursorLine(8);
 	print("                        Welcome to caOS!\n");
 	// print("             Arquitectura de Computadoras. 1Q2024\n");
@@ -60,7 +61,7 @@ int main() {
 	playBetterCallSaul();
 	setCursorLine(23);
 	print("Starting...");
-	wait(2000);
+	wait(1000);
 	scale_down();
 	clear_screen();
 	((EntryPoint)sampleCodeModuleAddress)();

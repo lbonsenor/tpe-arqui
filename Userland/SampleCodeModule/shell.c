@@ -82,7 +82,6 @@ void shell() {
       print("\n* divzero: Divide by 0 to trigger a zero division exception");
       print("\n* invalidopcode: Make an invalid opcode to trigger an invalid opcode exception");
       print("\n");
-      print("\n");
       insertCommand();
 }
 

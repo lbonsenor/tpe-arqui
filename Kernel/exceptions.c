@@ -41,7 +41,7 @@ void exceptionDispatcher(int exception, uint64_t registers[17]) {
 	for (int i = 0; i< 17; i++) {
 		print(registerOrder[i]);
 		print(": ");
-		intToStr(registers[i], buffer, 10);
+		intToStr(registers[i], buffer, 16);
 		print(buffer);
 		print(", ");
 	}

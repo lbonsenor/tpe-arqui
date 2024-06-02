@@ -12,6 +12,8 @@ void play_sound(uint32_t nFrequence) {
  	uint32_t Div;
  	uint8_t tmp;
  
+	nFrequence *= 0.5;
+
     // Sets the sound frequence
  	Div = 1193180 / nFrequence;
  	outb(0x43, 0xb6);
@@ -24,7 +26,7 @@ void play_sound(uint32_t nFrequence) {
  		outb(0x61, tmp | 3);
  	}
 }
- 
+
 // Makes it stop
 void nosound() {
  	uint8_t tmp = inb(0x61) & 0xFC;
