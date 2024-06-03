@@ -52,11 +52,8 @@ int main() {
 	load_IDT();
 	for (int i = 0; i < 4; i++) scale_down();
 	scale_up();
-	// print("   Matias Leporini, Lautaro Bonsenor, Ana Negre, Fernando Li\n");
 	setCursorLine(8);
 	print("                        Welcome to caOS!\n");
-	// print("             Arquitectura de Computadoras. 1Q2024\n");
-	// print("                               TPE\n");
 	putSaul(450,300,125,125);
 	playBetterCallSaul();
 	setCursorLine(23);

@@ -5,14 +5,14 @@
 
 void help() {
     print("Welcome to caOS Shell Manual! Here's the list of commands available:");
-    print("\n   time: Displays the current time");
-    print("\n   eliminator: Play Eliminator against yourself or a friend. Use WASD to move Player 1, IJKL to move Player 2");
-    print("\n   regs: Display the last saved value of registers, press CTRL to save");
-    print("\n   clear: Clean the screen");
-    print("\n   scaledown: Reduce the text size (min: 1, default: 1)");
-    print("\n   scaleup: Increment the text size (max: 4, default: 1)");
-    print("\n   divzero: Divide by 0 to trigger a zero division exception");
-    print("\n   invalidopcode: Make an invalid opcode to trigger an invalid opcode exception");
+    print("\n * clear: Clean the screen");
+    print("\n * divzero: Divide by 0 to trigger a zero division exception");
+    print("\n * eliminator: Play Eliminator against yourself or a friend. Use WASD to move Player 1, IJKL to move Player 2");
+    print("\n * invalidopcode: Make an invalid opcode to trigger an invalid opcode exception");
+    print("\n * regs: Display the last saved value of registers, press CTRL to save the registers");
+    print("\n * scaledown: Reduce the text size (min: 1, default: 1)");
+    print("\n * scaleup: Increment the text size (max: 4, default: 1)");
+    print("\n * time: Display the current time");
     print("\n");
 }
 
