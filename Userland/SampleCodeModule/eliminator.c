@@ -91,15 +91,16 @@ int didLose(int players) {
 void lose(int whoLost, int pts) {
     playWahWahWah();
     clearScreen();
+    setCursor(0, 15);
     switch (whoLost) {                
-        case 1: print("\nPlayer 1 LOST! Do you want to play again? YES / NO?\n            (change decision with a or d)\n\n");break;
-        case 2: print("\nPlayer 2 LOST! Do you want to play again? YES / NO?\n            (change decision with a or d)\n\n");break;
-        case 3: print("\nPlayer 1 and 2 TIED! Want a rematch?      YES / NO?\n            (change decision with a or d)\n\n");break;
+        case 1: print("\n                                      Player 1 LOST! Do you want to play again? YES / NO?\n                                                  (change decision with a or d)\n\n");break;
+        case 2: print("\n                                      Player 2 LOST! Do you want to play again? YES / NO?\n                                                  (change decision with a or d)\n\n");break;
+        case 3: print("\n                                           Player 1 and 2 TIED! Want a rematch? YES / NO?\n                                                  (change decision with a or d)\n\n");break;
         default:
             break;
     }
-    print("                  Y               N");
-    print("\n\nPTS: ");
+    print("                                                       Y               N");
+    print("\n\n                                                           PTS: ");
     char aux[7] = {0};
     print(itoa(pts, aux, 10));
 
@@ -107,16 +108,15 @@ void lose(int whoLost, int pts) {
     char currentDecision = 1;
     while (c != '\n') {
         c = getChar();
-        switch (c)
-        {
+        switch (c) {
         case 'a':
-            drawRectangle(0xFFFFFF, 18*8, 16*5, 8, 1);
-            drawRectangle(0x000000, 34*8, 16*5, 8, 1);
+            drawRectangle(0xFFFFFF, 439, 320, 8, 1);
+            drawRectangle(0x000000, 568, 320, 8, 1);
             currentDecision = 1;
             break;
         case 'd':
-            drawRectangle(0x000000, 18*8, 16*5, 8, 1);
-            drawRectangle(0xFFFFFF, 34*8, 16*5, 8, 1);
+            drawRectangle(0x000000, 439, 320, 8, 1);
+            drawRectangle(0xFFFFFF, 568, 320, 8, 1);
             currentDecision = 2;
             break;
         default:
@@ -213,9 +213,11 @@ void play2() {
 }
 
 void eliminator() {
+    for (int i = 0; i < 4; i++) scaleDown();
     clearScreen();
-    print("\nPlease select the amount of players and press ENTER\n            (change decision with a or d)\n\n");
-    print("                  1               2");
+    setCursor(0, 15);
+    print("\n                                      Please select the amount of players and press ENTER\n                                                (change decision with a or d)\n\n");
+    print("                                                       1               2");
     playDragonMelody();
     char c = 0;
     char currentDecision = 1;
@@ -223,13 +225,13 @@ void eliminator() {
         c = getChar();
         switch (c) {
         case 'a':
-            drawRectangle(0xFFFFFF, 18*8, 16*5, 8, 1);
-            drawRectangle(0x000000, 34*8, 16*5, 8, 1);
+            drawRectangle(0xFFFFFF, 439, 320, 8, 1);
+            drawRectangle(0x000000, 568, 320, 8, 1);
             currentDecision = 1;
             break;
         case 'd':
-            drawRectangle(0x000000, 18*8, 16*5, 8, 1);
-            drawRectangle(0xFFFFFF, 34*8, 16*5, 8, 1);
+            drawRectangle(0x000000, 439, 320, 8, 1);
+            drawRectangle(0xFFFFFF, 568, 320, 8, 1);
             currentDecision = 2;
             break;
         default:
