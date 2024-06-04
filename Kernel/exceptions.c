@@ -14,7 +14,7 @@ static void wrong_opcode();
 extern uint64_t resetMain();
 //RIP RAX RBX RCX RDX RSI RDI RBP RSP R8 R9 R10 R11 R12 R13 R14 R15 
 
-static char * registerOrder[18] = {"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15", "RGLAGS"};
+static char * registerOrder[18] = {"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15", "RFLAGS"};
 static char * errorMessage = "Program failed due to unhandled exception:\n";
 static char * waiting = "Restarting...";
 
