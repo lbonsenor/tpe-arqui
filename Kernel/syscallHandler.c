@@ -48,6 +48,7 @@ extern uint16_t getSeconds();
 17 - set cursor line
 18 - get registers
 35 - wait (copying linux system call nanosleep)
+36 - set cursor
 */ 
 
 uint64_t read(uint64_t fileDescriptor, uint64_t buffer, uint64_t length) {
